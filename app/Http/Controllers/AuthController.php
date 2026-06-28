@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -38,7 +37,12 @@ class AuthController extends Controller
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => $data['password'],
+            'address' => $data['address'],
+            'whatsapp' => $data['whatsapp'],
+            'nic' => $data['nic'],
+            'guardian_name' => $data['guardian_name'],
+            'guardian_phone' => $data['guardian_phone'],
         ]);
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user', 'token'));
