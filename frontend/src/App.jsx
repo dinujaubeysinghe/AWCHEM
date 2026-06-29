@@ -4,11 +4,15 @@ import Login from './pages/Login'
 import HomePage from './pages/HomePage'
 import Signup from './pages/Signup'
 
-//Admin Links
-import Students from './pages/admin/Students'
-import AdminDashboard from './pages/admin/AdminDashboard'
+// Layouts
+import AdminLayout from './layouts/AdminLayout'
+import StudentLayout from './layouts/StudentLayout'
 
-//Student Links
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard'
+import Students from './pages/admin/Students'
+
+// Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
 
 import { useAuth } from './context/AuthContext'
@@ -29,9 +33,17 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/student/dashboard' element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
-        <Route path='/admin/dashboard' element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path='/admin/students' element={<ProtectedRoute><Students /></ProtectedRoute>} />
+
+        {/* Admin routes — Sidebar rendered once in AdminLayout */}
+        <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path='dashboard' element={<AdminDashboard />} />
+          <Route path='students' element={<Students />} />
+        </Route>
+
+        {/* Student routes — Sidebar rendered once in StudentLayout */}
+        <Route path='/student' element={<ProtectedRoute><StudentLayout /></ProtectedRoute>}>
+          <Route path='dashboard' element={<StudentDashboard />} />
+        </Route>
       </Routes>
     </>
   )

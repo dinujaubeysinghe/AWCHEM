@@ -2,7 +2,7 @@ import React from 'react'
 import axiosClient from '../pages/axiosClient'
 import { useAuth } from '../context/AuthContext'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { LayoutDashboard, Users, BookOpen, ClipboardList, TrendingUp, LogOut, Settings } from 'lucide-react'
 
 export default function Sidebar() {
@@ -66,10 +66,10 @@ export default function Sidebar() {
                                 className={`px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
                                     ${isActive(link.path) ? 'bg-yelo/19' : ''}`}
                             >
-                                <a className="flex items-center" href={link.path}>
+                                <Link className="flex items-center" to={link.path}>
                                     {link.icon}
                                     <span className="ml-2">{link.name}</span>
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>
@@ -77,16 +77,16 @@ export default function Sidebar() {
                         <ul>
                             <li className={`px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
                                 ${isActive('/admin/settings') ? 'bg-yelo/19' : ''}`}>
-                                <a className="flex items-center" href="/admin/settings">
+                                <Link className="flex items-center" to="/admin/settings">
                                     <Settings className="w-5 h-5" />
                                     <span className="ml-2">Settings</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="px-6 py-2 text-red-400 cursor-pointer border-t border-t-[#E2E6EE]/20 mb-2">
-                                <a className="flex items-center" href="/logout">
+                                <Link className="flex items-center" to="/logout">
                                     <LogOut className="w-5 h-5" />
                                     <span className="ml-2">Logout</span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -112,10 +112,10 @@ export default function Sidebar() {
                                 className={`px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
                                     ${isActive(link.path) ? 'bg-navy && text-yelo' : ''}`}
                             >
-                                <a className="flex items-center" href={link.path}>
+                                <Link className="flex items-center" to={link.path}>
                                     {link.icon}
                                     <span className="ml-2">{link.name}</span>
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>
@@ -123,16 +123,16 @@ export default function Sidebar() {
                         <ul>
                             <li className={`px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
                                 ${isActive('/student/settings') ? 'bg-navy' : ''}`}>
-                                <a className="flex items-center" href="/student/settings">
+                                <Link className="flex items-center" to="/student/settings">
                                     <Settings className="w-5 h-5" />
                                     <span className="ml-2">Settings</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="px-6 py-2 text-red-500 cursor-pointer border-t border-t-navy/20 mb-2">
-                                <a className="flex items-center" href="/logout">
+                                <Link className="flex items-center" to="/logout">
                                     <LogOut className="w-5 h-5" />
                                     <span className="ml-2">Logout</span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
