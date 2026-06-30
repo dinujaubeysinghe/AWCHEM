@@ -41,7 +41,6 @@ export default function Sidebar() {
     ];
 
     const commonLinks = [
-        { icon: <Settings className='w-5 h-5' />, name: 'Settings', path: `${user?.is_admin ? '/admin/settings' : '/student/settings'}` },
         { icon: <LogOut className='w-5 h-5' />, name: 'Logout', path: '/logout' },
     ];
 
@@ -70,7 +69,7 @@ export default function Sidebar() {
                         <div className="flex flex-col justify-center items-center text-3xl font-bold pt-5 mb-4 text-white ">
                             {user?.first_name}
                             <div className="text-xs font-normal text-white">
-                                Administrator
+                                {user?.last_name}
                             </div>
                         </div>
                     </div>
@@ -90,17 +89,10 @@ export default function Sidebar() {
                     </ul>
                     <div className="mt-auto">
                         <ul>
-                            <li className={`px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
-                                ${isActive('/admin/settings') ? 'bg-yelo/19' : ''}`}>
-                                <Link className="flex items-center" to="/admin/settings">
-                                    <Settings className="w-5 h-5" />
-                                    <span className="ml-2">Settings</span>
-                                </Link>
-                            </li>
                             <li className="border-t border-t-gra/20 mt-1 mb-2">
                                 <button
                                     onClick={onLogout}
-                                    className="flex items-center w-full px-3 py-2 text-red-400 cursor-pointer rounded-lg hover:bg-red-400/10 transition-colors duration-150"
+                                    className="flex items-center w-full px-3 py-2 text-red-400 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
                                     <span className="ml-2">Logout</span>
@@ -112,14 +104,14 @@ export default function Sidebar() {
             )}
             {user?.is_admin === false && (
                 <div className="h-screen w-68 bg-gra flex flex-col">
-                    <div className="flex items-center justify-around px-8 border-b border-b-navy/20">
-                        <div className=" w-15 h-15 rounded-full overflow-hidden bg-navy mt-6 mb-4 text-center text-3xl font-bold  text-white pt-2.5">
-                            {user?.first_name.charAt(0).toUpperCase()}
+                    <div className="flex items-center justify-center gap-4 px-8 border-b border-b-navy/20">
+                        <div className="w-15 h-15 rounded-full overflow-hidden bg-navy mt-6 mb-4 text-center text-3xl font-bold text-white pt-2.5">
+                            {user?.first_name?.charAt(0)?.toUpperCase()}
                         </div>
-                        <div className="flex flex-col justify-center items-center text-xl font-bold pt-5 mb-4 text-navy">
+                        <div className="flex flex-col justify-center items-center text-3xl font-bold pt-5 mb-4 text-navy">
                             {user?.first_name}
                             <div className="text-xs font-normal text-navy">
-                                Student
+                                {user?.last_name}
                             </div>
                         </div>
                     </div>
@@ -139,17 +131,10 @@ export default function Sidebar() {
                     </ul>
                     <div className="mt-auto">
                         <ul>
-                            <li className={`px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
-                                ${isActive('/student/settings') ? 'bg-navy' : ''}`}>
-                                <Link className="flex items-center" to="/student/settings">
-                                    <Settings className="w-5 h-5" />
-                                    <span className="ml-2">Settings</span>
-                                </Link>
-                            </li>
                             <li className="border-t border-t-navy/20 mt-1 mb-2">
                                 <button
                                     onClick={onLogout}
-                                    className="flex items-center w-full px-3 py-2 text-red-500 cursor-pointer rounded-lg hover:bg-red-500/10 transition-colors duration-150"
+                                    className="flex items-center w-full px-3 py-2 text-red-500 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
                                     <span className="ml-2">Logout</span>
