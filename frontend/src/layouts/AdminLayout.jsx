@@ -10,7 +10,7 @@ export default function AdminLayout() {
             <Sidebar />
             <main className="flex-1 overflow-auto">
                 <Header />
-                <Outlet />
+                <Outlet className="h-full" />
                 <Footer />
             </main>
         </div>

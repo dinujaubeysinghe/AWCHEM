@@ -16,9 +16,14 @@ class UserController extends Controller
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
-    {
-        return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(10));
-    }
+{
+    return UserResource::collection(
+        User::query()
+            ->where('is_admin', false)
+            ->orderBy('id', 'desc')
+            ->paginate(10)
+    );
+}
 
     /**
      * Store a newly created resource in storage.
