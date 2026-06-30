@@ -11,10 +11,10 @@ export default function Header() {
     return (
         <>
             {user?.is_admin === true && (
-                <div className="bg-gray-800 text-white py-6 border-b border-gray-700 rounded-xl shadow-md ">
+                <div className="bg-navy text-white py-6 border-b border-gray-700 rounded-xl shadow-md mx-4 ">
                     <div className="flex items-center justify-between gap-4 px-8">
-                        <div className="text-3xl font-bold text-white">
-                            AWCHEM
+                        <div className="text-3xl font-sansala font-bold text-white">
+                            wixl <span className="text-3xl text-yelo font-sansala">jeÈisxy</span>
                         </div>
                         <div className=" text-3xl font-bold ">
                             Administrator Portal
@@ -30,10 +30,10 @@ export default function Header() {
             )}
 
             {user?.is_admin === false && (
-                <div className="bg-gray-800 text-white py-6 border-b border-gray-700 rounded-xl shadow-md">
+                <div className="bg-navy text-white py-6 border-b border-gray-700 rounded-xl shadow-md mx-4">
                     <div className="flex items-center justify-between gap-4 px-8">
-                        <div className="text-3xl font-bold text-white">
-                            AWCHEM
+                        <div className="text-3xl font-sansala text-white">
+                            wixl <span className="text-3xl text-yelo font-sansala">jeÈisxy</span>
                         </div>
                         <div className=" text-3xl font-bold ">
                             Student Portal

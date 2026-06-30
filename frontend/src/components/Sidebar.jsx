@@ -61,7 +61,7 @@ export default function Sidebar() {
     return (
         <>
             {user?.is_admin === true && (
-                <div className="h-screen w-68 bg-navy flex flex-col">
+                <div className="h-screen w-68 bg-navy flex flex-col border-r border-r-gra/20">
                     <div className="flex items-center justify-around px-8 border-b border-b-gra/20">
                         <div className=" w-15 h-15 rounded-full overflow-hidden bg-yelo mt-6 mb-4 text-center text-3xl font-bold  text-white pt-2.5">
                             {user?.first_name.charAt(0).toUpperCase()}
@@ -103,7 +103,7 @@ export default function Sidebar() {
                 </div>
             )}
             {user?.is_admin === false && (
-                <div className="h-screen w-68 bg-gra flex flex-col">
+                <div className="h-screen w-68 bg-gra flex flex-col border-r border-r-gra/20">
                     <div className="flex items-center justify-center gap-4 px-8 border-b border-b-navy/20">
                         <div className="w-15 h-15 rounded-full overflow-hidden bg-navy mt-6 mb-4 text-center text-3xl font-bold text-white pt-2.5">
                             {user?.first_name?.charAt(0)?.toUpperCase()}
