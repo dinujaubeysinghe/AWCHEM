@@ -115,14 +115,17 @@ export default function AdminCreateClasses() {
                         <label className="text-sm font-medium text-navy">
                             Day <span className="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
+                        <select
                             name="day"
                             value={formData.day}
                             onChange={handleChange}
-                            placeholder="e.g. Monday"
                             className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
-                        />
+                        >
+                            <option value="">Select Day</option>
+                            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d) => (
+                                <option key={d} value={d}>{d}</option>
+                            ))}
+                        </select>
                         {errors.day && <span className="text-xs text-red-500">{errors.day[0]}</span>}
                     </div>
 

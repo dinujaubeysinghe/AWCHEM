@@ -17,6 +17,7 @@ import AdminEditClasses from './pages/admin/AdminEditClasses'
 
 // Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
+import StudentClasses from './pages/students/StudentClasses'
 
 import { useAuth } from './context/AuthContext'
 
@@ -49,6 +50,7 @@ function App() {
         {/* Student routes — Sidebar rendered once in StudentLayout */}
         <Route path='/student' element={<ProtectedRoute><StudentLayout /></ProtectedRoute>}>
           <Route path='dashboard' element={<StudentDashboard />} />
+          <Route path='classes' element={<StudentClasses />} />
         </Route>
       </Routes>
     </>

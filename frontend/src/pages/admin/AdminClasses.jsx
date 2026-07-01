@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useEffect, useState } from 'react'
 import axiosClient from '../axiosClient'
-import { BookOpen, MapPin, Clock, Plus, Pencil, Trash2, Book } from 'lucide-react'
+import { BookOpen, MapPin, Clock, Plus, Pencil, Trash2, Book, Calendar } from 'lucide-react'
 
 export default function AdminClasses() {
 
@@ -118,7 +118,7 @@ export default function AdminClasses() {
                                                 <span>{cls.location}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                <MapPin className="w-4 h-4 text-yelo shrink-0" />
+                                                <Calendar className="w-4 h-4 text-yelo shrink-0" />
                                                 <span>{cls.day}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm text-gray-600">

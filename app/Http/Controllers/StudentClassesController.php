@@ -44,7 +44,9 @@ class StudentClassesController extends Controller
      */
     public function show(string $id)
     {
-        return new StudentClassesResource(StudentClasses);
+        $studentClass = StudentClasses::findOrFail($id);
+
+        return new StudentClassesResource($studentClass);
     }
 
     /**
