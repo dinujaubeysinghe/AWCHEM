@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::apiResource('/users', UserController::class);
+    Route::apiResource('classes', StudentClassesController::class);
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

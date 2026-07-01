@@ -21,7 +21,7 @@ export default function AdminLayout() {
             </div>
             {notifications && (
                 <div
-                    className="fixed top-6 right-6 max-w-sm px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white bg-navy z-50"
+                    className="fixed top-6 right-6 px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white bg-yelo z-50"
                     role="status"
                     aria-live="polite"
                 >

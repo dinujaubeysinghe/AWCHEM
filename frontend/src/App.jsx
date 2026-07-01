@@ -12,6 +12,7 @@ import StudentLayout from './layouts/StudentLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import Students from './pages/admin/Students'
 import AdminClasses from './pages/admin/AdminClasses'
+import AdminCreateClasses from './pages/admin/AdminCreateClasses'
 
 // Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
@@ -40,6 +41,7 @@ function App() {
           <Route path='dashboard' element={<AdminDashboard />} />
           <Route path='students' element={<Students />} />
           <Route path='classes' element={<AdminClasses />} />
+          <Route path='classes/create' element={<AdminCreateClasses />} />
         </Route>
 
         {/* Student routes — Sidebar rendered once in StudentLayout */}
