@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Navbar() {
   return (
-    <div>
+    <div className="fixed top-0 left-0 w-full z-50">
       <nav className="bg-navy mx-8 mt-2 rounded-full py-5 px-10 border border-white">
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 cursor-pointe">

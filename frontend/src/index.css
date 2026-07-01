@@ -8,11 +8,33 @@
 
 @font-face {
   font-family: 'Tharu Digital Sansala';
-  src: url('/TharuDigitalSansala.ttf') format('truetype');
+  src: url('/tharu_digital_sansala.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @theme {
   --font-sansala: 'Tharu Digital Sansala', sans-serif;
+}
+
+@font-face {
+  font-family: 'Tharu Digital Mahee';
+  src: url('/tharu_digital_mahee.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-mahee: 'Tharu Digital Mahee', sans-serif;
+}
+
+@font-face {
+  font-family: 'Iskoola Pota Regular';
+  src: url('/Iskoola%20Pota%20Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-iskoola: 'Iskoola Pota Regular', sans-serif;
 }
