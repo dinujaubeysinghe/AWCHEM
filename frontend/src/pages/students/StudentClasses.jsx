@@ -13,19 +13,25 @@ export default function StudentClasses() {
     const [unenrollingId, setUnenrollingId] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
 
+    const [enrollingClass, setEnrollingClass] = useState(null)
+    const [unenrollingClass, setUnenrollingClass] = useState(null)
+    const [enrollKey, setEnrollKey] = useState('')
+    const [unenrollKey, setUnenrollKey] = useState('')
+    const [keyError, setKeyError] = useState('')
+
     useEffect(() => {
-        fetchAllClasses();
+        getAllClasses();
     }, [])
 
-    const fetchAllClasses = () => {
+    const getAllClasses = () => {
         setLoading(true);
         Promise.all([
             axiosClient.get('/my/classes'),
             axiosClient.get('/available/classes')
         ])
             .then(([myRes, availableRes]) => {
-                setMyClasses(myRes.data);
-                setAvailableClasses(availableRes.data);
+                setMyClasses(myRes.data.data);
+                setAvailableClasses(availableRes.data.data);
                 setLoading(false);
             })
             .catch((err) => {
@@ -35,36 +41,47 @@ export default function StudentClasses() {
             });
     }
 
-    const handleEnroll = (classId) => {
-        setEnrollingId(classId);
-        axiosClient.post(`/enroll/${classId}`)
+    const handleEnroll = () => {
+        if (enrollKey.trim().toLowerCase() !== 'enroll me') {
+            setKeyError('Please type "enroll me" exactly to confirm.');
+            return;
+        }
+        setKeyError('');
+        axiosClient.post(`/enroll/${enrollingClass.id}`)
             .then(() => {
                 setNotifications('Enrolled successfully.');
-                fetchAllClasses();
-                setEnrollingId(null);
+                setEnrollingClass(null);
+                setEnrollKey('');
+                getAllClasses();
             })
             .catch((err) => {
-                setEnrollingId(null);
                 setNotifications('Error occurred while enrolling.');
+                setEnrollingClass(null);
+                setEnrollKey('');
                 console.error('Error enrolling:', err);
             });
     }
 
-    const handleUnenroll = (classId) => {
-        setUnenrollingId(classId);
-        axiosClient.delete(`/unenroll/${classId}`)
+    const handleUnenroll = () => {
+        if (unenrollKey.trim().toLowerCase() !== 'leave class') {
+            setKeyError('Please type "leave class" exactly to confirm.');
+            return;
+        }
+        setKeyError('');
+        axiosClient.delete(`/unenroll/${unenrollingClass.id}`)
             .then(() => {
                 setNotifications('Unenrolled successfully.');
-                fetchAllClasses();
-                setUnenrollingId(null);
+                setUnenrollingClass(null);
+                setUnenrollKey('');
+                getAllClasses();
             })
             .catch((err) => {
-                setUnenrollingId(null);
                 setNotifications('Error occurred while unenrolling.');
+                setUnenrollingClass(null);
+                setUnenrollKey('');
                 console.error('Error unenrolling:', err);
             });
     }
-
     const filteredAvailable = availableClasses.filter((cls) =>
         cls.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cls.batch?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,21 +134,17 @@ export default function StudentClasses() {
             <div className="pt-3 border-t border-gray-100">
                 {isEnrolled ? (
                     <button
-                        onClick={() => handleUnenroll(cls.id)}
-                        disabled={unenrollingId === cls.id}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors disabled:opacity-50"
-                    >
+                        onClick={() => { setUnenrollingClass(cls); setKeyError(''); }}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
                         <LogOut className="w-3.5 h-3.5" />
-                        {unenrollingId === cls.id ? 'Unenrolling...' : 'Unenroll'}
+                        Unenroll
                     </button>
                 ) : (
                     <button
-                        onClick={() => handleEnroll(cls.id)}
-                        disabled={enrollingId === cls.id}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors disabled:opacity-50"
-                    >
+                        onClick={() => { setEnrollingClass(cls); setKeyError(''); }}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors">
                         <LogIn className="w-3.5 h-3.5" />
-                        {enrollingId === cls.id ? 'Enrolling...' : 'Enroll'}
+                        Enroll
                     </button>
                 )}
             </div>
@@ -204,6 +217,77 @@ export default function StudentClasses() {
                     )}
                 </div>
             </main>
+            {/* Enroll Modal */}
+            {enrollingClass && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <h2 className="text-lg font-bold text-navy mb-2">Enroll in Class</h2>
+                        <p className="text-sm text-gray-600 mb-1">
+                            You are enrolling in{' '}
+                            <span className="font-semibold text-navy">{enrollingClass.name}</span>.
+                        </p>
+                        <p className="text-sm text-gray-600 mb-4">
+                            Type <span className="font-semibold text-navy">"enroll me"</span> to confirm.
+                        </p>
+                        <input
+                            type="text"
+                            placeholder="enroll me"
+                            value={enrollKey}
+                            onChange={(e) => { setEnrollKey(e.target.value); setKeyError(''); }}
+                            className="w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy text-sm"
+                        />
+                        {keyError && <p className="text-xs text-red-500 mb-3">{keyError}</p>}
+                        <div className="flex justify-end gap-2 mt-4">
+                            <button
+                                onClick={() => { setEnrollingClass(null); setEnrollKey(''); setKeyError(''); }}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleEnroll}
+                                className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors">
+                                Enroll
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Unenroll Modal */}
+            {unenrollingClass && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <h2 className="text-lg font-bold text-navy mb-2">Unenroll from Class</h2>
+                        <p className="text-sm text-gray-600 mb-1">
+                            You are unenrolling from{' '}
+                            <span className="font-semibold text-navy">{unenrollingClass.name}</span>.
+                        </p>
+                        <p className="text-sm text-gray-600 mb-4">
+                            Type <span className="font-semibold text-navy">"leave class"</span> to confirm.
+                        </p>
+                        <input
+                            type="text"
+                            placeholder="leave class"
+                            value={unenrollKey}
+                            onChange={(e) => { setUnenrollKey(e.target.value); setKeyError(''); }}
+                            className="w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy text-sm"
+                        />
+                        {keyError && <p className="text-xs text-red-500 mb-3">{keyError}</p>}
+                        <div className="flex justify-end gap-2 mt-4">
+                            <button
+                                onClick={() => { setUnenrollingClass(null); setUnenrollKey(''); setKeyError(''); }}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleUnenroll}
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors">
+                                Unenroll
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

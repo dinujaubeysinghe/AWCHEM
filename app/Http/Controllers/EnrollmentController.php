@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StudentClass;
+use App\Models\StudentClasses;
 use App\Models\StudentEnrollment;
 use App\Http\Resources\StudentClassesResource;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class EnrollmentController extends Controller
     public function myClasses(Request $request)
     {
         $user = $request->user();
-        $classes = $user->StudentClasses()
+        $classes = $user->studentClasses()
             ->get();
 
         return StudentClassesResource::collection($classes);
@@ -27,9 +27,9 @@ class EnrollmentController extends Controller
     public function availableClasses(Request $request)
     {
         $user = $request->user();
-        $enrolledClassIds = $user->classes()->pluck('student_classes.id');
+        $enrolledClassIds = StudentEnrollment::where('user_id', $user->id)->pluck('student_class_id');
 
-        $classes = StudentClass::whereNotIn('id', $enrolledClassIds)->get();
+        $classes = StudentClasses::whereNotIn('id', $enrolledClassIds)->get();
 
         return StudentClassesResource::collection($classes);
     }
@@ -43,7 +43,7 @@ class EnrollmentController extends Controller
 
         // Check if already enrolled
         $alreadyEnrolled = StudentEnrollment::where('user_id', $user->id)
-            ->where('class_id', $classId)
+            ->where('student_class_id', $classId)
             ->exists();
 
         if ($alreadyEnrolled) {
@@ -54,7 +54,7 @@ class EnrollmentController extends Controller
 
         StudentEnrollment::create([
             'user_id' => $user->id,
-            'class_id' => $classId,
+            'student_class_id' => $classId,
         ]);
 
         return response([
@@ -70,7 +70,7 @@ class EnrollmentController extends Controller
         $user = $request->user();
 
         $enrollment = StudentEnrollment::where('user_id', $user->id)
-            ->where('class_id', $classId)
+            ->where('student_class_id', $classId)
             ->first();
 
         if (!$enrollment) {

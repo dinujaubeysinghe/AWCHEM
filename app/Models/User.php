@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\StudentEnrollment;
-use App\Models\StudentClass;
+use App\Models\StudentClasses;
 
 #[Fillable(['first_name', 'last_name', 'email', 'password', 'is_admin', 'address', 'whatsapp', 'nic', 'guardian_name', 'guardian_phone'])]
 #[Hidden(['password', 'remember_token'])]
@@ -20,11 +20,11 @@ class User extends Authenticatable
 {
     public function studentEnrollments()
     {
-        return $this->hasMany(StudentEnrollment::class);
+        return $this->hasMany(StudentEnrollment::class, 'user_id');
     }
     public function studentClasses()
     {
-        return $this->belongsToMany(StudentClass::class, 'student_enrollments', 'user_id', 'student_class_id');
+        return $this->belongsToMany(StudentClasses::class, 'student_enrollments', 'user_id', 'student_class_id');
     }
 
 
