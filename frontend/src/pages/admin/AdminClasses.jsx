@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useEffect, useState } from 'react'
 import axiosClient from '../axiosClient'
-import { BookOpen, MapPin, Clock, Plus, Pencil, Trash2 } from 'lucide-react'
+import { BookOpen, MapPin, Clock, Plus, Pencil, Trash2, Book } from 'lucide-react'
 
 export default function AdminClasses() {
 
@@ -118,14 +118,24 @@ export default function AdminClasses() {
                                                 <span>{cls.location}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                <MapPin className="w-4 h-4 text-yelo shrink-0" />
+                                                <span>{cls.day}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-gray-600">
                                                 <Clock className="w-4 h-4 text-yelo shrink-0" />
                                                 <span>{cls.start_time} — {cls.end_time}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                <Book className="w-4 h-4 text-yelo shrink-0" />
+                                                <span>Ongoing Unit : {cls.ong_unit}</span>
                                             </div>
                                         </div>
 
                                         {/* Card Actions */}
                                         <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
-                                            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
+                                            <button 
+                                            onClick={() => navigate(`/admin/classes/edit/${cls.id}`)}
+                                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
                                                 <Pencil className="w-3.5 h-3.5" />
                                                 Edit
                                             </button>

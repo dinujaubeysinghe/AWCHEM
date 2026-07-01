@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('batch');
             $table->string('location');
+            $table->string('day');
             $table->time('start_time');
             $table->time('end_time');
+            $table->string('ong_unit');
             $table->timestamps();
         });
     }

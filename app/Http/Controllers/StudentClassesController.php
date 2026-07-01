@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StudentClassesResource;
+use App\Models\StudentClasses;
 use Illuminate\Http\Request;
 
 class StudentClassesController extends Controller
@@ -27,8 +29,10 @@ class StudentClassesController extends Controller
             'name' => 'required|string|max:100',
             'batch' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'day' => 'required|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'ong_unit' => 'required|string|max:100',
         ]);
 
         $studentClass = StudentClasses::create($date);
@@ -52,8 +56,10 @@ class StudentClassesController extends Controller
             'name' => 'required|string|max:100',
             'batch' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'day' => 'required|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
+            'ong_unit' => 'required|string|max:100',
         ]);
         $studentClass = StudentClasses::findOrFail($id);
         $studentClass->update($date);

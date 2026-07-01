@@ -22,9 +22,11 @@ class StudentClassesResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'batch' => $this->batch,
+            'day' => $this->day,
             'location' => $this->location,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+            'start_time' => $this->start_time ? date('h:i A', strtotime($this->start_time)) : null,
+            'end_time' => $this->end_time ? date('h:i A', strtotime($this->end_time)) : null,
+            'ong_unit' => $this->ong_unit,
         ];
     }
 }
