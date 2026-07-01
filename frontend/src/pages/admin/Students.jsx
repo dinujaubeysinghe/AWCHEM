@@ -1,12 +1,13 @@
 import React from 'react'
 import axiosClinet from '../axiosClient'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
 
 export default function Students() {
     const [user, setUser] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(false)
-
+    const { setNotifications } = useAuth()
     const filteredStudents = user.filter((student) =>
         `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
         || student.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -26,21 +27,24 @@ export default function Students() {
             })
             .catch((err) => {
                 setLoading(false)
+                setNotifications('Error occurred while fetching user data.');
                 console.error('Error occurred while fetching user data:', err);
             });
     };
 
-    const onDelete = (student) => {
+    const onDelete = async (student) => {
         if (!window.confirm("Are you sure you want to delete this student?")) {
             return;
         }
-        axiosClinet.delete(`/users/${student.id}`)
-            .then(() => {
-                getUsers();
-            })
-            .catch((err) => {
-                console.error('Error occurred while deleting user:', err);
-            });
+
+        try {
+            await axiosClinet.delete(`/users/${student.id}`)
+            setNotifications('User deleted successfully.')
+            getUsers()
+        } catch (err) {
+            setNotifications('Error occurred while deleting user.')
+            console.error('Error occurred while deleting user:', err)
+        }
     };
 
     return (
@@ -58,7 +62,7 @@ export default function Students() {
                         placeholder="Search students..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-64"/>
+                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-64" />
                 </div>
 
                 {loading ? (
@@ -94,7 +98,7 @@ export default function Students() {
                                         <td className="py-3 px-6">
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
-                                                    onClick={event => onDelete(student)}
+                                                    onClick={() => onDelete(student)}
                                                     className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
                                                     Delete
                                                 </button>
@@ -112,7 +116,7 @@ export default function Students() {
                         )}
                     </div>
                 )}
-            </main>
+            </main> 
         </div>
     )
 }
