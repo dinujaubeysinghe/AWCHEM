@@ -15,6 +15,9 @@ import AdminClasses from './pages/admin/AdminClasses'
 import AdminCreateClasses from './pages/admin/AdminCreateClasses'
 import AdminEditClasses from './pages/admin/AdminEditClasses'
 import AdminClassDetails from './pages/admin/AdminClassDetails'
+import AdminQuiz from './pages/admin/quiz/AdminQuiz'
+import AdminCreateQuiz from './pages/admin/quiz/AdminCreateQuiz'
+import AdminEditQuiz from './pages/admin/quiz/AdminEditQuiz'
 
 // Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
@@ -47,6 +50,9 @@ function App() {
           <Route path='classes/create' element={<AdminCreateClasses />} />
           <Route path='classes/edit/:id' element={<AdminEditClasses />} />
           <Route path='classes/:id' element={<AdminClassDetails />} />
+          <Route path='quizzes' element={<AdminQuiz />} />
+          <Route path='quizzes/create' element={<AdminCreateQuiz />} />
+          <Route path='quizzes/edit/:id' element={<AdminEditQuiz />} />
         </Route>
 
         {/* Student routes — Sidebar rendered once in StudentLayout */}

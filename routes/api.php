@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\UserController;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/users', UserController::class);
     Route::apiResource('classes', StudentClassesController::class);
+    Route::apiResource('quizzes', QuizController::class);
     
     Route::get('/my/classes', [EnrollmentController::class, 'myClasses']);
     Route::get('/available/classes', [EnrollmentController::class, 'availableClasses']);
