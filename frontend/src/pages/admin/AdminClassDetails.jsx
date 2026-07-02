@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import axiosClient from '../axiosClient'
-import { BookOpen, MapPin, Clock, CalendarDays, Users, ArrowLeft, CheckCircle, XCircle, Clock3 } from 'lucide-react'
+import { BookOpen, MapPin, Clock, CalendarDays, Users, ArrowLeft, CheckCircle, XCircle, Clock3, Pencil, Plus } from 'lucide-react'
 
 export default function AdminClassDetails() {
 
@@ -48,17 +48,17 @@ export default function AdminClassDetails() {
     }
 
     const onRemoveStudent = () => {
-       const std = studentToRemove;
-       setStudentToRemove(null);
-       axiosClient.delete(`/classes/${id}/users/${std.id}`)
-           .then(() => {
-               setNotifications(`Student ${std.first_name} ${std.last_name} removed successfully.`)
-               getClassDetails()
-           })
-           .catch((err) => {
-               setNotifications('Error occurred while removing student.')
-               console.error('Error occurred while removing student:', err)
-           })
+        const std = studentToRemove;
+        setStudentToRemove(null);
+        axiosClient.delete(`/classes/${id}/users/${std.id}`)
+            .then(() => {
+                setNotifications(`Student ${std.first_name} ${std.last_name} removed successfully.`)
+                getClassDetails()
+            })
+            .catch((err) => {
+                setNotifications('Error occurred while removing student.')
+                console.error('Error occurred while removing student:', err)
+            })
     };
 
     return (
@@ -79,12 +79,21 @@ export default function AdminClassDetails() {
                     <h1 className="text-2xl font-bold text-navy">{classDetails.name}</h1>
                     <p className="text-sm text-gray-500 mt-1">Class Details & Enrolled Students</p>
                 </div>
+                <div className="flex gap-3">
                 <button
                     onClick={() => navigate(`/admin/classes/edit/${id}`)}
-                    className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors"
                 >
+                    <Pencil className="w-3.5 h-3.5" />
                     Edit Class
                 </button>
+                <button
+                    onClick={() => navigate('/admin/classes/quizzes')}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors">
+                    <Plus className="w-4 h-4" />
+                    Add Quizzes
+                </button>
+                </div>
             </div>
 
             {/* Class Info Card */}
@@ -182,7 +191,7 @@ export default function AdminClassDetails() {
                                             onClick={() => setStudentToRemove(student)}
                                             className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors"
                                         >
-                                            Remove      
+                                            Remove
                                         </button>
                                     </td>
                                 </tr>
