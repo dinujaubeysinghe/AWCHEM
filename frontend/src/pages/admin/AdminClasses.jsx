@@ -135,13 +135,19 @@ export default function AdminClasses() {
                                         {/* Card Actions */}
                                         <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
                                             <button 
-                                            onClick={() => navigate(`/admin/classes/edit/${cls.id}`)}
+                                            onClick={(event) => {
+                                                event.stopPropagation()
+                                                navigate(`/admin/classes/edit/${cls.id}`)
+                                            }}
                                             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
                                                 <Pencil className="w-3.5 h-3.5" />
                                                 Edit
                                             </button>
                                             <button
-                                                onClick={() => setClassToDelete(cls)}
+                                                onClick={(event) => {
+                                                    event.stopPropagation()
+                                                    setClassToDelete(cls)
+                                                }}
                                                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
                                                 <Trash2 className="w-3.5 h-3.5" />
                                                 Delete

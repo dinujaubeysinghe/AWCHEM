@@ -103,7 +103,6 @@ export default function StudentClasses() {
                         </span>
                     </div>
                 </div>
-                <span className="text-xs text-gray-400">#{cls.id}</span>
             </div>
 
             {/* Card Details */}

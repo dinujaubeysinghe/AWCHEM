@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../axiosClient'
 import { useAuth } from '../../context/AuthContext'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, ArrowLeft } from 'lucide-react'
 
 export default function AdminCreateClasses() {
 
@@ -48,6 +48,13 @@ export default function AdminCreateClasses() {
 
     return (
         <div className="p-6">
+            <button
+                onClick={() => navigate('/admin/classes')}
+                className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy mb-6 transition-colors"
+            >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Classes
+            </button>
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-navy">Add Class</h1>
                 <p className="text-sm text-gray-500 mt-1">Fill in the details to create a new class.</p>
