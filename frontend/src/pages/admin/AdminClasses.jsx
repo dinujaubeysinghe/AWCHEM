@@ -93,7 +93,8 @@ export default function AdminClasses() {
                                 {filteredClasses.map((cls) => (
                                     <div
                                         key={cls.id}
-                                        className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow"
+                                        className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                                        onClick={() => navigate(`/admin/classes/${cls.id}`)}
                                     >
                                         {/* Card Header */}
                                         <div className="flex items-start justify-between mb-4">
@@ -108,7 +109,7 @@ export default function AdminClasses() {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <span className="text-xs text-gray-400">#{cls.id}</span>
+                                           
                                         </div>
 
                                         {/* Card Details */}

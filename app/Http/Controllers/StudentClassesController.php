@@ -44,7 +44,7 @@ class StudentClassesController extends Controller
      */
     public function show(string $id)
     {
-        $studentClass = StudentClasses::findOrFail($id);
+        $studentClass = StudentClasses::with('users')->findOrFail($id);
 
         return new StudentClassesResource($studentClass);
     }
@@ -75,6 +75,13 @@ class StudentClassesController extends Controller
     {
         $studentClass = StudentClasses::findOrFail($id);
         $studentClass->delete();
+        return response( "" , 204);
+    }
+    public function removeStudent($classId, $studentId)
+    {
+        $studentClass = StudentClasses::findOrFail($classId);
+        $studentClass->users()->detach($studentId);
+
         return response( "" , 204);
     }
 }

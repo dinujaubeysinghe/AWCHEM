@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/available/classes', [EnrollmentController::class, 'availableClasses']);
     Route::post('/enroll/{classId}', [EnrollmentController::class, 'enroll']);
     Route::delete('/unenroll/{classId}', [EnrollmentController::class, 'unenroll']);
+    Route::delete('/classes/{classId}/users/{userId}', [StudentClassesController::class, 'removeStudent']);
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

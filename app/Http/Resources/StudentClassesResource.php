@@ -25,6 +25,15 @@ class StudentClassesResource extends JsonResource
             'start_time' => $this->start_time ? date('h:i A', strtotime($this->start_time)) : null,
             'end_time' => $this->end_time ? date('h:i A', strtotime($this->end_time)) : null,
             'ong_unit' => $this->ong_unit,
+            'users' => $this->whenLoaded('users', function () {
+                    return $this->users->map(fn($user) => [
+                        'id' => $user->id,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        'whatsapp' => $user->whatsapp,
+                    ]);
+             }),
         ];
     }
 }
