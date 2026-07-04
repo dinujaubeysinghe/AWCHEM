@@ -64,4 +64,8 @@ class QuizController extends Controller
         $quiz->delete();
         return response("", 204);
     }
+    public function all()
+{
+    return QuizResource::collection(Quiz::orderBy('title')->get());
+}
 }

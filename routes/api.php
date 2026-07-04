@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClassQuizController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentClassesController;
@@ -27,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/users', UserController::class);
     Route::apiResource('classes', StudentClassesController::class);
+
+    Route::get('/quizzes/all', [QuizController::class, 'all']); 
     Route::apiResource('quizzes', QuizController::class);
     
     Route::get('/my/classes', [EnrollmentController::class, 'myClasses']);
@@ -34,6 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/enroll/{classId}', [EnrollmentController::class, 'enroll']);
     Route::delete('/unenroll/{classId}', [EnrollmentController::class, 'unenroll']);
     Route::delete('/classes/{classId}/users/{userId}', [StudentClassesController::class, 'removeStudent']);
+
+    Route::get('/classes/{classId}/quizzes', [ClassQuizController::class, 'index']);
+    Route::put('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'update']);
+    Route::post('/classes/{classId}/quizzes', [ClassQuizController::class, 'store']);
+    Route::delete('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'destroy']);
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

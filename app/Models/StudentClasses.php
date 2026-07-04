@@ -20,6 +20,7 @@ class StudentClasses extends Model
     {
         return $this->belongsToMany(User::class, 'student_enrollments', 'student_class_id', 'user_id');
     }
+
     
     protected $table = 'student_classes';
 }
