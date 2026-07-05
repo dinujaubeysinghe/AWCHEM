@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ClassQuizController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuizController;
@@ -43,6 +44,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'update']);
     Route::post('/classes/{classId}/quizzes', [ClassQuizController::class, 'store']);
     Route::delete('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'destroy']);
+
+    Route::get('/my/results', [ResultController::class, 'myResults']);
+    Route::get('/results', [ResultController::class, 'index']);
+    Route::post('/results', [ResultController::class, 'store']);
+    Route::put('/results/{result}', [ResultController::class, 'update']);
+    Route::delete('/results/{result}', [ResultController::class, 'destroy']);
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

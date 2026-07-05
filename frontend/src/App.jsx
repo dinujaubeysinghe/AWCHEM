@@ -18,11 +18,13 @@ import AdminClassDetails from './pages/admin/AdminClassDetails'
 import AdminQuiz from './pages/admin/quiz/AdminQuiz'
 import AdminCreateQuiz from './pages/admin/quiz/AdminCreateQuiz'
 import AdminEditQuiz from './pages/admin/quiz/AdminEditQuiz'
+import AdminResults from './pages/admin/result/AdminResults'
 
 // Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
 import StudentClasses from './pages/students/StudentClasses'
 import StudentQuizzes from './pages/students/StudentQuizzes'
+import StudentResults from './pages/students/StudentResult'
 
 import { useAuth } from './context/AuthContext'
 
@@ -54,6 +56,7 @@ function App() {
           <Route path='quizzes' element={<AdminQuiz />} />
           <Route path='quizzes/create' element={<AdminCreateQuiz />} />
           <Route path='quizzes/edit/:id' element={<AdminEditQuiz />} />
+          <Route path='results' element={<AdminResults />} />
         </Route>
 
         {/* Student routes — Sidebar rendered once in StudentLayout */}
@@ -61,6 +64,7 @@ function App() {
           <Route path='dashboard' element={<StudentDashboard />} />
           <Route path='classes' element={<StudentClasses />} />
           <Route path='quizzes' element={<StudentQuizzes />} />
+          <Route path='results' element={<StudentResults />} />
         </Route>
       </Routes>
     </>
