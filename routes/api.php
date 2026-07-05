@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/unenroll/{classId}', [EnrollmentController::class, 'unenroll']);
     Route::delete('/classes/{classId}/users/{userId}', [StudentClassesController::class, 'removeStudent']);
 
+    Route::get('/my/quizzes', [EnrollmentController::class, 'myQuizzes']);
     Route::get('/classes/{classId}/quizzes', [ClassQuizController::class, 'index']);
     Route::put('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'update']);
     Route::post('/classes/{classId}/quizzes', [ClassQuizController::class, 'store']);

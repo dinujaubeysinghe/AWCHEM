@@ -22,6 +22,7 @@ import AdminEditQuiz from './pages/admin/quiz/AdminEditQuiz'
 // Student pages
 import StudentDashboard from './pages/students/StudentDashboard'
 import StudentClasses from './pages/students/StudentClasses'
+import StudentQuizzes from './pages/students/StudentQuizzes'
 
 import { useAuth } from './context/AuthContext'
 
@@ -59,6 +60,7 @@ function App() {
         <Route path='/student' element={<ProtectedRoute><StudentLayout /></ProtectedRoute>}>
           <Route path='dashboard' element={<StudentDashboard />} />
           <Route path='classes' element={<StudentClasses />} />
+          <Route path='quizzes' element={<StudentQuizzes />} />
         </Route>
       </Routes>
     </>

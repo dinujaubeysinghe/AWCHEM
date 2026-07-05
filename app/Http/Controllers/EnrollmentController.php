@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassQuiz;
 use App\Models\StudentClasses;
 use App\Models\StudentEnrollment;
+use App\Http\Resources\ClassQuizResource;
 use App\Http\Resources\StudentClassesResource;
 use Illuminate\Http\Request;
 
@@ -85,4 +87,16 @@ class EnrollmentController extends Controller
             'message' => 'Unenrolled successfully.'
         ], 200);
     }
+    public function myQuizzes(Request $request)
+{
+    $user = $request->user();
+    
+    $classIds = $user->studentClasses()->pluck('student_classes.id');
+    
+    $quizzes = ClassQuiz::with('quiz', 'studentClass')
+        ->whereIn('class_id', $classIds)
+        ->get();
+    
+    return ClassQuizResource::collection($quizzes);
+}
 }

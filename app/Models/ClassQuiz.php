@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Quiz;
+use App\Models\StudentClasses;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +17,6 @@ class ClassQuiz extends Model
 
     public function studentClass()
     {
-        return $this->belongsTo(StudentClasses::class, 'class_id');
+    return $this->belongsTo(StudentClasses::class, 'class_id');
     }
 }

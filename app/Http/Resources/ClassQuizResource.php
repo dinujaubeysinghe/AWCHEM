@@ -23,6 +23,7 @@ class ClassQuizResource extends JsonResource
             'start_time' => $this->start_time ? date('g:i A', strtotime($this->start_time)) : null,
             'end_time' => $this->end_time ? date('g:i A', strtotime($this->end_time)) : null,
             'quiz_link' => $this->quiz_link,
+            'class_name' => $this->studentClass?->name,
         ];
     }
 
