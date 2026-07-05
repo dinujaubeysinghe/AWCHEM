@@ -3,7 +3,7 @@ import axiosClient from '../pages/axiosClient'
 import { useAuth } from '../context/AuthContext'
 import { useEffect } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, BookOpen, ClipboardList, TrendingUp, LogOut, Settings } from 'lucide-react'
+import { LayoutDashboard, Users, BookOpen, ClipboardList, TrendingUp, LogOut } from 'lucide-react'
 
 export default function Sidebar() {
 
@@ -14,10 +14,8 @@ export default function Sidebar() {
     const isActive = (path) => pathname === path;
 
     useEffect(() => {
-        // Fetch user data from the backend when the component mounts
         axiosClient.get('/user')
             .then(({ data }) => {
-                console.log('User data fetched:', data);
                 setUser(data);
             })
             .catch((err) => {
@@ -40,10 +38,6 @@ export default function Sidebar() {
         { icon: <TrendingUp className='w-5 h-5' />, name: 'My Results', path: '/student/results' },
     ];
 
-    const commonLinks = [
-        { icon: <LogOut className='w-5 h-5' />, name: 'Logout', path: '/logout' },
-    ];
-
     const onLogout = () => {
         axiosClient.post('/logout')
             .then(() => {
@@ -61,28 +55,28 @@ export default function Sidebar() {
     return (
         <>
             {user?.is_admin === true && (
-                <div className="h-screen w-68 bg-navy flex flex-col border-r border-r-gra/20">
-                    <div className="flex items-center justify-around px-8 border-b border-b-gra/20">
-                        <div className=" w-15 h-15 rounded-full overflow-hidden bg-yelo mt-6 mb-4 text-center text-3xl font-bold  text-white pt-2.5">
+                <div className="h-screen w-16 md:w-56 lg:w-68 bg-navy flex flex-col border-r border-r-gra/20 transition-all duration-300">
+                    <div className="flex items-center justify-center md:justify-around px-2 md:px-8 border-b border-b-gra/20">
+                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-yelo mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl font-bold text-white pt-1.5 md:pt-2.5 shrink-0">
                             {user?.first_name.charAt(0).toUpperCase()}
                         </div>
-                        <div className="flex flex-col justify-center items-center text-3xl font-bold pt-5 mb-4 text-white ">
+                        <div className="hidden md:flex flex-col justify-center items-center text-xl lg:text-3xl font-bold pt-5 mb-4 text-white">
                             {user?.first_name}
-                            <div className="text-xs font-normal text-white">
+                            <div className="text-sm font-normal text-white">
                                 {user?.last_name}
                             </div>
                         </div>
                     </div>
-                    <ul className="mt-4 px-3">
+                    <ul className="mt-4 px-2 md:px-3">
                         {adminLinks.map((link) => (
                             <li
                                 key={link.name}
-                                className={`px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
+                                className={`px-2 md:px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
                                     ${isActive(link.path) ? 'bg-yelo/19' : ''}`}
                             >
-                                <Link className="flex items-center" to={link.path}>
+                                <Link className="flex items-center justify-center md:justify-start" to={link.path}>
                                     {link.icon}
-                                    <span className="ml-2">{link.name}</span>
+                                    <span className="hidden md:block ml-2">{link.name}</span>
                                 </Link>
                             </li>
                         ))}
@@ -92,10 +86,10 @@ export default function Sidebar() {
                             <li className="border-t border-t-gra/20 mt-1 mb-2">
                                 <button
                                     onClick={onLogout}
-                                    className="flex items-center w-full px-3 py-2 text-red-400 cursor-pointer rounded-lg transition-colors duration-150"
+                                    className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-400 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
-                                    <span className="ml-2">Logout</span>
+                                    <span className="hidden md:block ml-2">Logout</span>
                                 </button>
                             </li>
                         </ul>
@@ -103,28 +97,28 @@ export default function Sidebar() {
                 </div>
             )}
             {user?.is_admin === false && (
-                <div className="h-screen w-68 bg-gra flex flex-col border-r border-r-gra/20">
-                    <div className="flex items-center justify-center gap-4 px-8 border-b border-b-navy/20">
-                        <div className="w-15 h-15 rounded-full overflow-hidden bg-navy mt-6 mb-4 text-center text-3xl font-bold text-white pt-2.5">
+                <div className="h-screen w-16 md:w-56 lg:w-68 bg-gra flex flex-col border-r border-r-gra/20 transition-all duration-300">
+                    <div className="flex items-center justify-center md:justify-center gap-0 md:gap-4 px-2 md:px-8 border-b border-b-navy/20">
+                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-navy mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl font-bold text-white pt-1.5 md:pt-2.5 shrink-0">
                             {user?.first_name?.charAt(0)?.toUpperCase()}
                         </div>
-                        <div className="flex flex-col justify-center items-center text-3xl font-bold pt-5 mb-4 text-navy">
+                        <div className="hidden md:flex flex-col justify-center items-center text-2xl lg:text-3xl font-bold pt-5 mb-4 text-navy">
                             {user?.first_name}
                             <div className="text-xs font-normal text-navy">
                                 {user?.last_name}
                             </div>
                         </div>
                     </div>
-                    <ul className="mt-4 px-3">
+                    <ul className="mt-4 px-2 md:px-3">
                         {studentLinks.map((link) => (
                             <li
                                 key={link.name}
-                                className={`px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
-                                    ${isActive(link.path) ? 'bg-navy && text-yelo' : ''}`}
+                                className={`px-2 md:px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
+                                    ${isActive(link.path) ? 'bg-navy/10' : ''}`}
                             >
-                                <Link className="flex items-center" to={link.path}>
+                                <Link className="flex items-center justify-center md:justify-start" to={link.path}>
                                     {link.icon}
-                                    <span className="ml-2">{link.name}</span>
+                                    <span className="hidden md:block ml-2">{link.name}</span>
                                 </Link>
                             </li>
                         ))}
@@ -134,10 +128,10 @@ export default function Sidebar() {
                             <li className="border-t border-t-navy/20 mt-1 mb-2">
                                 <button
                                     onClick={onLogout}
-                                    className="flex items-center w-full px-3 py-2 text-red-500 cursor-pointer rounded-lg transition-colors duration-150"
+                                    className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-500 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
-                                    <span className="ml-2">Logout</span>
+                                    <span className="hidden md:block ml-2">Logout</span>
                                 </button>
                             </li>
                         </ul>

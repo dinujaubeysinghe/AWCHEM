@@ -55,7 +55,7 @@ export default function StudentResult() {
         const marks = results.map((r) => Number(r.marks) || 0)
         const total = results.length
         const best = Math.max(...marks)
-        const passed = marks.filter((m) => m >= 50).length
+        const passed = marks.filter((m) => m >= 40).length
         const passRate = Math.round((passed / total) * 100)
         return { total, best, passRate }
     }, [results])
@@ -69,8 +69,8 @@ export default function StudentResult() {
     }
 
     const markBadge = (marks) =>
-        marks >= 75 ? 'bg-green-100 text-green-700' :
-            marks >= 50 ? 'bg-yellow-100 text-yellow-600' :
+        marks >= 65 ? 'bg-green-100 text-green-700' :
+            marks >= 40 ? 'bg-yellow-100 text-yellow-600' :
                 'bg-red-100 text-red-600'
 
     return (
@@ -84,19 +84,19 @@ export default function StudentResult() {
             {/* Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <StatCard
-                    icon={<BookOpen className="w-5 h-5 text-yelo" />}
+                    icon={<BookOpen className="w-5 h-5 text-white" />}
                     label="Total Quizzes"
                     value={stats.total}
                     tone="bg-navy"
                 />
                 <StatCard
-                    icon={<Award className="w-5 h-5 text-yelo" />}
+                    icon={<Award className="w-5 h-5 text-white" />}
                     label="Best Score"
                     value={`${stats.best}%`}
                     tone="bg-navy"
                 />
                 <StatCard
-                    icon={<TrendingUp className="w-5 h-5 text-yelo" />}
+                    icon={<TrendingUp className="w-5 h-5 text-white" />}
                     label="Pass Rate"
                     value={`${stats.passRate}%`}
                     tone="bg-navy"
@@ -162,9 +162,9 @@ export default function StudentResult() {
                                             </span>
                                         </td>
                                         <td className="py-3 px-6">
-                                            <span className={`text-xs font-semibold ${result.marks >= 50 ? 'text-green-600' : 'text-red-600'
+                                            <span className={`text-xs font-semibold ${result.marks >= 65 ? 'text-green-600' : result.marks >= 40 ? 'text-yellow-600' : 'text-red-600'
                                                 }`}>
-                                                {result.marks >= 50 ? 'Pass' : 'Fail'}
+                                                {result.marks >= 65 ? 'Excellent' : result.marks >= 40 ? 'Pass' : 'Weak'}
                                             </span>
                                         </td>
                                     </tr>
