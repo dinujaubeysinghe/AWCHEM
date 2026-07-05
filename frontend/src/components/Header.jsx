@@ -14,7 +14,7 @@ export default function Header() {
                 <div className="bg-navy text-white py-4 md:py-6 border-b border-gray-700 rounded-xl shadow-md mx-2 md:mx-4">
                     <div className="flex items-center justify-between gap-2 md:gap-4 px-4 md:px-8">
                         <Link to="/admin/dashboard" 
-                        className="text-xl md:text-3xl font-sansala font-bold text-white shrink-0 cursor-pointer">
+                        className="text-xl md:text-3xl font-sansala text-white shrink-0 cursor-pointer">
                             wixl <span className="text-yelo font-sansala ">jeÈisxy</span>
                         </Link>
                         <div className="hidden sm:block text-lg md:text-3xl font-bold">

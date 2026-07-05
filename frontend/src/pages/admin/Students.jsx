@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 
 export default function Students() {
+    const [deletedStudent, setDeletedStudent] = useState(null)
     const [user, setUser] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(false)
@@ -32,20 +33,19 @@ export default function Students() {
             });
     };
 
-    const onDelete = async (student) => {
-        if (!window.confirm("Are you sure you want to delete this student?")) {
-            return;
-        }
-
-        try {
-            await axiosClinet.delete(`/users/${student.id}`)
-            setNotifications('User deleted successfully.')
-            getUsers()
-        } catch (err) {
-            setNotifications('Error occurred while deleting user.')
-            console.error('Error occurred while deleting user:', err)
-        }
-    };
+    const onDelete = () => {
+        const student = deletedStudent;
+        setDeletedStudent(null);
+        axiosClinet.delete(`/users/${student.id}`)
+            .then(() => {
+                setNotifications(`${student.first_name} ${student.last_name} was deleted successfully.`);
+                getUsers();
+            })
+            .catch((err) => {
+                setNotifications('Error occurred while deleting student.');
+                console.error('Error occurred while deleting student:', err);
+            });
+    }
 
     return (
         <div className="p-6">
@@ -98,7 +98,10 @@ export default function Students() {
                                         <td className="py-3 px-6">
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
-                                                    onClick={() => onDelete(student)}
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        setDeletedStudent(student);
+                                                    }}
                                                     className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
                                                     Delete
                                                 </button>
@@ -116,7 +119,33 @@ export default function Students() {
                         )}
                     </div>
                 )}
-            </main> 
+                {deletedStudent && (
+                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <h2 className="text-lg font-bold text-navy mb-2">Remove Student</h2>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Are you sure you want to delete{' '}
+                            <span className="font-semibold text-gray-900">
+                                {deletedStudent.first_name} {deletedStudent.last_name}
+                            </span>
+                            ? This action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setDeletedStudent(null)}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={onDelete}
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                )}
+            </main>
         </div>
     )
 }

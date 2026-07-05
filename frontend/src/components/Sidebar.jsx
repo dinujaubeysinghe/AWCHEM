@@ -4,12 +4,15 @@ import { useAuth } from '../context/AuthContext'
 import { useEffect } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Users, BookOpen, ClipboardList, TrendingUp, LogOut } from 'lucide-react'
+import { useState } from 'react'
 
 export default function Sidebar() {
 
     const { user, setUser, setToken } = useAuth();
     const navigate = useNavigate();
     const { pathname } = useLocation();
+       const [loggingOut, setLoggingOut] = useState(false)
+       const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     const isActive = (path) => pathname === path;
 
@@ -39,16 +42,17 @@ export default function Sidebar() {
     ];
 
     const onLogout = () => {
+        setLoggingOut(true);
         axiosClient.post('/logout')
             .then(() => {
-                setUser(null);
+                setLoggingOut(false);
                 setToken(null);
+                setUser({});
                 navigate('/login');
             })
-            .catch(() => {
-                setUser(null);
-                setToken(null);
-                navigate('/login');
+            .catch((err) => {
+                setLoggingOut(false);
+                console.error('Error occurred while logging out:', err);
             });
     };
 
@@ -85,7 +89,7 @@ export default function Sidebar() {
                         <ul>
                             <li className="border-t border-t-gra/20 mt-1 mb-2">
                                 <button
-                                    onClick={onLogout}
+                                    onClick={() => setShowLogoutModal(true)}
                                     className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-400 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
@@ -127,7 +131,7 @@ export default function Sidebar() {
                         <ul>
                             <li className="border-t border-t-navy/20 mt-1 mb-2">
                                 <button
-                                    onClick={onLogout}
+                                    onClick={() => setShowLogoutModal(true)}
                                     className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-500 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
@@ -135,6 +139,37 @@ export default function Sidebar() {
                                 </button>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            )}
+            {showLogoutModal && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                                <LogOut className="w-5 h-5" />
+                            </div>
+                            <h2 className="text-lg font-bold text-navy">Logout</h2>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Are you sure you want to log out of your account?
+                        </p>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setShowLogoutModal(false)}
+                                disabled={loggingOut}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={onLogout}
+                                disabled={loggingOut}
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                {loggingOut ? 'Logging out...' : 'Logout'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
