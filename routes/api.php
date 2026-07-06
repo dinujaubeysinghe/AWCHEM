@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ClassQuizController;
 use App\Http\Controllers\AuthController;
@@ -29,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/users', UserController::class);
     Route::apiResource('classes', StudentClassesController::class);
+
+    Route::apiResource('notices', NoticeController::class);
 
     Route::get('/quizzes/all', [QuizController::class, 'all']); 
     Route::apiResource('quizzes', QuizController::class);

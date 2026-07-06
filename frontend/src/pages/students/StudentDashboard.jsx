@@ -14,7 +14,8 @@ export default function StudentDashboard() {
   const [myQuizzes, setMyQuizzes] = useState([])
   const [myResults, setMyResults] = useState([])
   const [loading, setLoading] = useState(false)
-  // Add alongside other useState declarations
+  const [notices, setNotices] = useState([])
+
   const [doneIds, setDoneIds] = useState(() => {
     try {
       const stored = localStorage.getItem('doneQuizzes')
@@ -37,6 +38,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     getDashboardData()
+    getNotices()
   }, [])
 
   const getDashboardData = () => {
@@ -56,6 +58,21 @@ export default function StudentDashboard() {
         setLoading(false)
         setNotifications('Error occurred while fetching dashboard data.')
         console.error(err)
+      })
+  }
+
+  const getNotices = () => {
+    setLoading(true)
+    axiosClient.get('/notices')
+      .then(({ data }) => {
+        setLoading(false)
+        setNotices(data.data)
+        console.log('Notice data fetched:', data);
+      })
+      .catch((err) => {
+        setLoading(false)
+        setNotifications('Error occurred while fetching notice data.')
+        console.error('Error occurred while fetching notice data:', err)
       })
   }
 
@@ -85,6 +102,21 @@ export default function StudentDashboard() {
           Here's your class activity and upcoming quizzes.
         </p>
       </div>
+
+       <div className="flex flex-col gap-3 mb-8">
+                    {notices.map((notice) => (
+                        <div key={notice.id} className="bg-white border border-yelo rounded-2xl overflow-hidden">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-yelo px-4 py-3">
+                                <h3 className="text-lg sm:text-2xl font-bold text-white min-w-0">
+                                    {notice.title}
+                                </h3>
+                            </div>
+                            <p className="text-md sm:text-md text-gray-700 p-4 whitespace-pre-wrap ">
+                                {notice.content}
+                            </p>
+                        </div>
+                    ))}
+                </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
