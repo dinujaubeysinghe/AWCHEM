@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
@@ -25,20 +26,20 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string|max:55',
-            'last_name' => 'required|string|max:55',
-            'email' => 'required|email|unique:users,email,'.$this->id,
-            'password' => [
+            'first_name'     => 'required|string|max:55',
+            'last_name'      => 'required|string|max:55',
+            'email'          => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('user')->id)],
+            'password'       => [
                 'nullable',
                 'confirmed',
                 Password::min(8)
                     ->letters()
                     ->symbols(),
             ],
-            'address' => 'required|string|max:255',
-            'whatsapp' => 'required|string|max:20',
-            'nic' => 'required|string|max:20|unique:users,nic,'.$this->id,
-            'guardian_name' => 'required|string|max:55',
+            'address'        => 'required|string|max:255',
+            'whatsapp'       => 'required|string|max:20',
+            'nic'            => ['required', 'string', 'max:20', Rule::unique('users', 'nic')->ignore($this->route('user')->id)],
+            'guardian_name'  => 'required|string|max:55',
             'guardian_phone' => 'required|string|max:20',
         ];
     }

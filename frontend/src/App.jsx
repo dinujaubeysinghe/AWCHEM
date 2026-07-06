@@ -3,12 +3,13 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import HomePage from './pages/HomePage'
 import Signup from './pages/Signup'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import ProfileSettings from './pages/ProfileSettings'
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout'
 import StudentLayout from './layouts/StudentLayout'
-import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -61,6 +62,7 @@ function App() {
           <Route path='quizzes/create' element={<AdminCreateQuiz />} />
           <Route path='quizzes/edit/:id' element={<AdminEditQuiz />} />
           <Route path='results' element={<AdminResults />} />
+          <Route path='settings' element={<ProfileSettings />} />
         </Route>
 
         {/* Student routes — Sidebar rendered once in StudentLayout */}
@@ -69,6 +71,7 @@ function App() {
           <Route path='classes' element={<StudentClasses />} />
           <Route path='quizzes' element={<StudentQuizzes />} />
           <Route path='results' element={<StudentResults />} />
+          <Route path='settings' element={<ProfileSettings />} />
         </Route>
       </Routes>
     </>

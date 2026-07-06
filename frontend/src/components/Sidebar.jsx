@@ -66,7 +66,7 @@ export default function Sidebar() {
                         </div>
                         <div className="hidden md:flex flex-col justify-center items-center text-xl lg:text-3xl font-bold pt-5 mb-4 text-white">
                             {user?.first_name}
-                            <div className="text-md font-normal text-white">
+                            <div className="text-sm font-normal text-white">
                                 {user?.last_name}
                             </div>
                         </div>
