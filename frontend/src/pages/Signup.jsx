@@ -3,7 +3,7 @@ import register from '../assets/signup.webp'
 import { useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
 import axiosClient from './axiosClient'
-import { useAuth } from '../context/ContextProvider'
+import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 
 export default function Signup() {
@@ -31,7 +31,7 @@ export default function Signup() {
             last_name: lastNameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
-            confirm_password: confirmPasswordRef.current.value,
+            password_confirmation: confirmPasswordRef.current.value,
             address: addressRef.current.value,
             whatsapp: whatsappRef.current.value,
             nic: nicRef.current.value,
@@ -45,9 +45,15 @@ export default function Signup() {
                 setToken(data.token);
                 navigate('/login');
             })
-            .catch((error) => {
-                console.error('Error occurred while registering:', error);
-                setError(error.response?.data?.errors);
+            .catch((err) => {
+                console.error('Error occurred while registering:', err);
+                if (err.response?.data?.errors) {
+                    setError(err.response.data.errors);
+                } else if (err.response?.data?.message) {
+                    setError(err.response.data.message);
+                } else {
+                    setError(err.message || 'Something went wrong');
+                }
             });
     };
 
@@ -65,11 +71,22 @@ export default function Signup() {
 
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong className="font-bold">Error!</strong>
-                    <span className="block sm:inline">{error}</span>
+                    <strong className="font-bold">Error! </strong>
+                    <span className="block sm:inline">
+                        {typeof error === 'string' ? (
+                            error
+                        ) : (
+                            <ul className="list-disc pl-5 mt-1 text-sm">
+                                {Object.keys(error).map((key) => (
+                                    <li key={key}>
+                                        {Array.isArray(error[key]) ? error[key].join(', ') : error[key]}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </span>
                 </div>
-            )
-            }
+            )}
 
           <div className="flex gap-4">
             <div className="flex flex-col flex-1">

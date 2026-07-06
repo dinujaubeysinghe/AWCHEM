@@ -6,43 +6,59 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use App\Models\User;
-use http\Env\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request){
-
+    public function login(LoginRequest $request)
+{
     $credentials = $request->validated();
 
-    if(!Auth::attempt($credentials)){
+    $user = User::where('email', $credentials['email'])->first();
+
+    if (!$user || !Hash::check($credentials['password'], $user->password)) {
         return response([
-            'message' => 'The provided credentials are incorrect'
+            'message' => 'The provided credentials are incorrect.'
         ], 422);
     }
-    /**  @var User $user */
-    $user = Auth::user();
+
+    if (!$user->hasVerifiedEmail()) {
+        return response([
+            'message' => 'Please verify your email address before logging in.',
+            'email_verified' => false,
+        ], 403);
+    }
+
     $token = $user->createToken('main')->plainTextToken;
-     return response(compact('user', 'token'));
-        
-    }
 
-    public function signup(SignupRequest $request){
+    return response(compact('user', 'token'));
+}
 
-        $data = $request->validated();
+    public function signup(SignupRequest $request)
+{
+    $data = $request->validated();
 
-        /**  @var User $user */
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-        $token = $user->createToken('main')->plainTextToken;
-        return response(compact('user', 'token'));
-    }
+    /** @var User $user */
+    $user = User::create([
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'email' => $data['email'],
+        'password' => bcrypt($data['password']),
+        'address' => $data['address'],
+        'whatsapp' => $data['whatsapp'],
+        'nic' => $data['nic'],
+        'guardian_name' => $data['guardian_name'],
+        'guardian_phone' => $data['guardian_phone'],
+    ]);
+
+    $user->sendEmailVerificationNotification();
+
+    return response([
+        'message' => 'Registration successful. Please check your email to verify your account.',
+    ], 201);
+}
 
     public function logout(Request $request){
 

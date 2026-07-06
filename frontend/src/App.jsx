@@ -1,8 +1,40 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import HomePage from './pages/HomePage'
 import Signup from './pages/Signup'
+
+// Layouts
+import AdminLayout from './layouts/AdminLayout'
+import StudentLayout from './layouts/StudentLayout'
+
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard'
+import Students from './pages/admin/Students'
+import AdminClasses from './pages/admin/AdminClasses'
+import AdminCreateClasses from './pages/admin/AdminCreateClasses'
+import AdminEditClasses from './pages/admin/AdminEditClasses'
+import AdminClassDetails from './pages/admin/AdminClassDetails'
+import AdminQuiz from './pages/admin/quiz/AdminQuiz'
+import AdminCreateQuiz from './pages/admin/quiz/AdminCreateQuiz'
+import AdminEditQuiz from './pages/admin/quiz/AdminEditQuiz'
+import AdminResults from './pages/admin/result/AdminResults'
+
+// Student pages
+import StudentDashboard from './pages/students/StudentDashboard'
+import StudentClasses from './pages/students/StudentClasses'
+import StudentQuizzes from './pages/students/StudentQuizzes'
+import StudentResults from './pages/students/StudentResult'
+
+import { useAuth } from './context/AuthContext'
+
+function ProtectedRoute({ children }) {
+  const { token } = useAuth()
+  if (!token) {
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
 
 function App() {
   
@@ -12,6 +44,28 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
+
+        {/* Admin routes — Sidebar rendered once in AdminLayout */}
+        <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path='dashboard' element={<AdminDashboard />} />
+          <Route path='students' element={<Students />} />
+          <Route path='classes' element={<AdminClasses />} />
+          <Route path='classes/create' element={<AdminCreateClasses />} />
+          <Route path='classes/edit/:id' element={<AdminEditClasses />} />
+          <Route path='classes/:id' element={<AdminClassDetails />} />
+          <Route path='quizzes' element={<AdminQuiz />} />
+          <Route path='quizzes/create' element={<AdminCreateQuiz />} />
+          <Route path='quizzes/edit/:id' element={<AdminEditQuiz />} />
+          <Route path='results' element={<AdminResults />} />
+        </Route>
+
+        {/* Student routes — Sidebar rendered once in StudentLayout */}
+        <Route path='/student' element={<ProtectedRoute><StudentLayout /></ProtectedRoute>}>
+          <Route path='dashboard' element={<StudentDashboard />} />
+          <Route path='classes' element={<StudentClasses />} />
+          <Route path='quizzes' element={<StudentQuizzes />} />
+          <Route path='results' element={<StudentResults />} />
+        </Route>
       </Routes>
     </>
   )
