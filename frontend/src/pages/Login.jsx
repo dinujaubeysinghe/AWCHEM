@@ -137,15 +137,24 @@ export default function Login() {
                             ref={emailRef} />
 
                         {/* Password field */}
-                        <div className="flex ml-1 mb-1">
+                        <div className="flex flex-col  ml-1">
+                        <div className="flex ml-1">
                             <label className="text-lg text-navy">Password</label>
                             <span className="text-red-500 ml-1">*</span>
                         </div>
                         <input
                             type="password"
                             placeholder="Password"
-                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6"
+                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy"
                             ref={passwordRef} />
+
+                         {/* Forgot password */}
+                        <div className='mb-6 mt-1'>
+                            <a href="/forgot-password" className="text-sm text-gray-500 hover:text-navy hover:underline">
+                                Forgot Password?
+                            </a>
+                        </div>
+                        </div>
 
                         {/* Submit button */}
                         <button
@@ -153,13 +162,6 @@ export default function Login() {
                             className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300">
                             Login
                         </button>
-
-                        {/* Forgot password */}
-                        <div className="mt-3 text-center">
-                            <a href="/forgot-password" className="text-sm text-gray-500 hover:text-navy hover:underline">
-                                Forgot Password?
-                            </a>
-                        </div>
 
                         {/* Sign up link */}
                         <div className="mt-3 text-center">

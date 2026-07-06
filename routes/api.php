@@ -8,8 +8,13 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\UserController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +89,45 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
     return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/login?verified=1');
 
 })->middleware('signed')->name('verification.verify');
+
+
+// Forgot password
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    if ($status === Password::RESET_LINK_SENT) {
+        return response(['message' => 'Reset link sent to your email.'], 200);
+    }
+
+    return response(['message' => 'We could not find a user with that email.'], 404);
+});
+
+// Reset password
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+            $user->save();
+            event(new PasswordReset($user));
+        }
+    );
+
+    if ($status === Password::PASSWORD_RESET) {
+        return response(['message' => 'Password reset successfully.'], 200);
+    }
+
+    return response(['message' => 'Invalid or expired reset token.'], 400);
+});

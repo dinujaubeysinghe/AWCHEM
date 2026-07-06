@@ -66,7 +66,7 @@ export default function Sidebar() {
                         </div>
                         <div className="hidden md:flex flex-col justify-center items-center text-xl lg:text-3xl font-bold pt-5 mb-4 text-white">
                             {user?.first_name}
-                            <div className="text-sm font-normal text-white">
+                            <div className="text-md font-normal text-white">
                                 {user?.last_name}
                             </div>
                         </div>
@@ -103,12 +103,12 @@ export default function Sidebar() {
             {user?.is_admin === false && (
                 <div className="h-screen w-16 md:w-56 lg:w-68 bg-gra flex flex-col border-r border-r-gra/20 transition-all duration-300">
                     <div className="flex items-center justify-center md:justify-center gap-0 md:gap-4 px-2 md:px-8 border-b border-b-navy/20">
-                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-navy mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl font-bold text-white pt-1.5 md:pt-2.5 shrink-0">
+                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-navy mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl  text-white pt-1.5 md:pt-2.5 shrink-0">
                             {user?.first_name?.charAt(0)?.toUpperCase()}
                         </div>
-                        <div className="hidden md:flex flex-col justify-center items-center text-2xl lg:text-3xl font-bold pt-5 mb-4 text-navy">
+                        <div className="hidden md:flex flex-col justify-center items-center text-2xl lg:text-2xl font-bold pt-5 mb-4 text-navy">
                             {user?.first_name}
-                            <div className="text-xs font-normal text-navy">
+                            <div className="text-sm font-bold text-navy">
                                 {user?.last_name}
                             </div>
                         </div>

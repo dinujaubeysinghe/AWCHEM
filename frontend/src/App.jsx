@@ -7,6 +7,8 @@ import Signup from './pages/Signup'
 // Layouts
 import AdminLayout from './layouts/AdminLayout'
 import StudentLayout from './layouts/StudentLayout'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -37,13 +39,15 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
-  
+
   return (
     <>
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Admin routes — Sidebar rendered once in AdminLayout */}
         <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
