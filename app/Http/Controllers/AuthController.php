@@ -12,42 +12,53 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request){
+    public function login(LoginRequest $request)
+{
+    $credentials = $request->validated();
 
-        $credentials = $request->validated();
+    $user = User::where('email', $credentials['email'])->first();
 
-        $user = User::where('email', $credentials['email'])->first();
-
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            return response([
-                'message' => 'The provided credentials are incorrect'
-            ], 422);
-        }
-
-        $token = $user->createToken('main')->plainTextToken;
-
-        return response(compact('user', 'token'));
+    if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        return response([
+            'message' => 'The provided credentials are incorrect.'
+        ], 422);
     }
 
-    public function signup(SignupRequest $request){
-
-        $data = $request->validated();
-
-        /**  @var User $user */
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'address' => $data['address'],
-            'whatsapp' => $data['whatsapp'],
-            'nic' => $data['nic'],
-            'guardian_name' => $data['guardian_name'],
-            'guardian_phone' => $data['guardian_phone'],
-        ]);
-        $token = $user->createToken('main')->plainTextToken;
-        return response(compact('user', 'token'));
+    if (!$user->hasVerifiedEmail()) {
+        return response([
+            'message' => 'Please verify your email address before logging in.',
+            'email_verified' => false,
+        ], 403);
     }
+
+    $token = $user->createToken('main')->plainTextToken;
+
+    return response(compact('user', 'token'));
+}
+
+    public function signup(SignupRequest $request)
+{
+    $data = $request->validated();
+
+    /** @var User $user */
+    $user = User::create([
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name'],
+        'email' => $data['email'],
+        'password' => bcrypt($data['password']),
+        'address' => $data['address'],
+        'whatsapp' => $data['whatsapp'],
+        'nic' => $data['nic'],
+        'guardian_name' => $data['guardian_name'],
+        'guardian_phone' => $data['guardian_phone'],
+    ]);
+
+    $user->sendEmailVerificationNotification();
+
+    return response([
+        'message' => 'Registration successful. Please check your email to verify your account.',
+    ], 201);
+}
 
     public function logout(Request $request){
 

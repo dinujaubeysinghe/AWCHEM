@@ -50,7 +50,34 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/results', [ResultController::class, 'store']);
     Route::put('/results/{result}', [ResultController::class, 'update']);
     Route::delete('/results/{result}', [ResultController::class, 'destroy']);
+
+     Route::post('/email/verification-notification', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response(['message' => 'Email already verified.'], 200);
+        }
+        $request->user()->sendEmailVerificationNotification();
+        return response(['message' => 'Verification email sent.'], 200);
+    })->name('verification.send');
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = \App\Models\User::findOrFail($id);
+
+    if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        return response(['message' => 'Invalid verification link.'], 403);
+    }
+
+    if ($user->hasVerifiedEmail()) {
+        return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/login?verified=1');
+    }
+
+    if ($user->markEmailAsVerified()) {
+        event(new \Illuminate\Auth\Events\Verified($user));
+    }
+
+    return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/login?verified=1');
+
+})->middleware('signed')->name('verification.verify');
