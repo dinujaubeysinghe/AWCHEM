@@ -7,7 +7,7 @@ export default function Navbar() {
 
     return (
         <div className="fixed top-0 left-0 w-full z-50">
-            <nav className="bg-navy mx-2 sm:mx-4 md:mx-8 mt-2 rounded-full py-4 md:py-5 px-6 md:px-10 border border-white">
+            <nav className="bg-navy mx-2 sm:mx-4 md:mx-8 mt-2 rounded-lg lg:rounded-full py-4 md:py-5 px-6 md:px-10 border border-white">
                 <div className="flex items-center justify-between">
 
                     {/* Logo */}
@@ -31,7 +31,7 @@ export default function Navbar() {
 
                     {/* Mobile Hamburger */}
                     <button
-                        className="md:hidden text-white ml-4"
+                        className="md:hidden text-white ml-4 "
                         onClick={() => setMenuOpen(!menuOpen)}
                     >
                         {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

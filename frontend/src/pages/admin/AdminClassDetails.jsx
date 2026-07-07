@@ -293,14 +293,14 @@ export default function AdminClassDetails() {
 
             {/* Quiz Assignments */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 px-6 py-4">
                     <div className="flex items-center gap-2">
                         <ClipboardList className="w-5 h-5 text-yelo" />
                         <h2 className="text-sm font-bold text-navy">Quiz Assignments</h2>
                     </div>
                     <button
                         onClick={() => setShowAssignQuiz(true)}
-                        className="flex items-center gap-2 px-4 py-2 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors">
+                        className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors self-start sm:self-auto">
                         <Plus className="w-3.5 h-3.5" />
                         Assign Quiz
                     </button>

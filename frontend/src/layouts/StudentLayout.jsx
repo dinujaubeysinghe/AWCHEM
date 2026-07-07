@@ -13,9 +13,11 @@ export default function StudentLayout() {
         <>
             <div className="flex h-screen">
                 <Sidebar />
-                <main className="flex-1 overflow-auto">
+                <main className="flex-1 overflow-auto flex flex-col">
                     <Header />
-                    <Outlet className="h-full" />
+                    <div className="flex-1">
+                        <Outlet />
+                    </div>
                     <Footer />
                 </main>
             </div>

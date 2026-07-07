@@ -1,5 +1,5 @@
 import React from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useEffect, useState } from 'react'
 import axiosClient from '../axiosClient'
@@ -56,24 +56,24 @@ export default function AdminClasses() {
         <div className="p-6 relative">
             <main>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-navy">All Classes</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-navy">All Classes</h1>
                         <p className="text-sm text-gray-500 mt-1">
                             {filteredClasses.length} class{filteredClasses.length !== 1 ? 'es' : ''} available
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                         <input
                             type="text"
                             placeholder="Search classes..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-64"
+                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full xs:w-56 sm:w-64"
                         />
-                        <button 
+                        <button
                             onClick={() => navigate('/admin/classes/create')}
-                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors">
+                            className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors whitespace-nowrap">
                             <Plus className="w-4 h-4" />
                             Add Class
                         </button>
@@ -109,7 +109,7 @@ export default function AdminClasses() {
                                                     </span>
                                                 </div>
                                             </div>
-                                           
+
                                         </div>
 
                                         {/* Card Details */}
@@ -134,12 +134,12 @@ export default function AdminClasses() {
 
                                         {/* Card Actions */}
                                         <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
-                                            <button 
-                                            onClick={(event) => {
-                                                event.stopPropagation()
-                                                navigate(`/admin/classes/edit/${cls.id}`)
-                                            }}
-                                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
+                                            <button
+                                                onClick={(event) => {
+                                                    event.stopPropagation()
+                                                    navigate(`/admin/classes/edit/${cls.id}`)
+                                                }}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
                                                 <Pencil className="w-3.5 h-3.5" />
                                                 Edit
                                             </button>

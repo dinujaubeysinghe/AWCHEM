@@ -58,15 +58,18 @@ export default function Signup() {
     };
 
   return (
-    <div className="flex">
-      <div className="w-1/2 min-h-screen bg-white flex items-center justify-start">
-        <img src={register} alt="Register Illustration" className="w-3/4 h-screen rounded-r-4xl" />
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Illustration: hidden on mobile/tablet, visible from lg breakpoint up */}
+      <div className="hidden lg:flex lg:w-1/2 min-h-screen bg-white items-center justify-start">
+        <img src={register} alt="Register Illustration" className="w-3/4 h-screen rounded-r-4xl object-cover" />
       </div>
 
-      <div className="w-1/2 min-h-screen flex flex-col items-center justify-center">
-        <div className="text-5xl font-bold text-navy mb-8 mt-6">REGISTER</div>
-        <form 
-        className="flex flex-col w-3/4 bg-[#f9f9f9] p-8 rounded-2xl shadow-md" 
+      <div className="w-full lg:w-1/2 min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:px-6">
+        <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy mb-6 mt-2 sm:mb-8 sm:mt-6 text-center">
+          REGISTER
+        </div>
+        <form
+        className="flex flex-col w-full max-w-md sm:max-w-lg lg:w-3/4 bg-[#f9f9f9] p-5 sm:p-8 rounded-2xl shadow-md"
         onSubmit={handleSubmit}>
 
             {error && (
@@ -88,129 +91,129 @@ export default function Signup() {
                 </div>
             )}
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">First Name</label>
+                <label className="text-base sm:text-lg text-navy">First Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="First Name" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="First Name"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={firstNameRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Last Name</label>
+                <label className="text-base sm:text-lg text-navy">Last Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="Last Name" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="Last Name"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={lastNameRef}/>
             </div>
           </div>
 
           <div className="flex ml-1">
-            <label className="text-lg text-navy">Email</label>
+            <label className="text-base sm:text-lg text-navy">Email</label>
             <span className="text-red-500 ml-1">*</span>
           </div>
-          <input 
-          type="text" 
-          placeholder="Email" 
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+          <input
+          type="text"
+          placeholder="Email"
+          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
           ref={emailRef}/>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Password</label>
+                <label className="text-base sm:text-lg text-navy">Password</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="password" 
-              placeholder="Password" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="password"
+              placeholder="Password"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={passwordRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Confirm Password</label>
+                <label className="text-base sm:text-lg text-navy">Confirm Password</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="password" 
-              placeholder="Confirm Password" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="password"
+              placeholder="Confirm Password"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={confirmPasswordRef}/>
             </div>
           </div>
 
           <div className="flex ml-1">
-            <label className="text-lg text-navy">Address</label>
+            <label className="text-base sm:text-lg text-navy">Address</label>
             <span className="text-red-500 ml-1">*</span>
           </div>
-          <input 
-          type="text" 
-          placeholder="Address" 
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+          <input
+          type="text"
+          placeholder="Address"
+          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
           ref={addressRef}/>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Whatsapp</label>
+                <label className="text-base sm:text-lg text-navy">Whatsapp</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="Whatsapp" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="Whatsapp"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={whatsappRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">NIC</label>
+                <label className="text-base sm:text-lg text-navy">NIC</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="NIC" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="NIC"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={nicRef}/>
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Guardian Name</label>
+                <label className="text-base sm:text-lg text-navy">Guardian Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="Guardian Name" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="Guardian Name"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={guardianNameRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-lg text-navy">Guardian Phone</label>
+                <label className="text-base sm:text-lg text-navy">Guardian Phone</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
-              <input 
-              type="text" 
-              placeholder="Guardian Phone" 
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6" 
+              <input
+              type="text"
+              placeholder="Guardian Phone"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={guardianPhoneRef}/>
             </div>
           </div>
 
-          <button 
-          type="submit" 
-          className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300"
+          <button
+          type="submit"
+          className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 w-full"
           >
             Register
             </button>

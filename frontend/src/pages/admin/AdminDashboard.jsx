@@ -133,7 +133,7 @@ export default function AdminDashboard() {
             label: 'Active Classes',
             value: stats.totalClasses,
             icon: <BookOpen className="w-6 h-6" />,
-            bg: 'bg-yelo',
+            bg: 'bg-navy',
             path: '/admin/classes',
         },
         {
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                 </div>
                 <button
                     onClick={openCreateNotice}
-                    className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors shrink-0"
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors whitespace-nowrap"
                 >
                     <Plus className="w-4 h-4" />
                     Add Notice

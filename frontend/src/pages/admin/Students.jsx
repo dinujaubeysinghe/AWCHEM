@@ -48,11 +48,11 @@ export default function Students() {
     }
 
     return (
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
             <main>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-navy">Students</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-navy">Students</h1>
                         <p className="text-sm text-gray-500 mt-1">
                             {filteredStudents ? `${filteredStudents.length} student${filteredStudents.length !== 1 ? 's' : ''} enrolled` : ''}
                         </p>
@@ -62,7 +62,7 @@ export default function Students() {
                         placeholder="Search students..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-64" />
+                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full sm:w-64" />
                 </div>
 
                 {loading ? (
@@ -71,56 +71,58 @@ export default function Students() {
                     </div>
                 ) : (
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <table className="min-w-full">
-                            <thead>
-                                <tr className="bg-gra">
-                                    <th className="py-3 px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">ID</th>
-                                    <th className="py-3 px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Name</th>
-                                    <th className="py-3 px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Email</th>
-                                    <th className="py-3 px-6 text-right text-xs font-semibold text-navy uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {filteredStudents && filteredStudents.map((student) => (
-                                    <tr key={student.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="py-3 px-6 text-sm text-gray-500">AW{student.id}</td>
-                                        <td className="py-3 px-6">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-9 h-9 rounded-full bg-navy text-white flex items-center justify-center text-sm font-bold shrink-0">
-                                                    {student.first_name?.charAt(0).toUpperCase()}
-                                                </div>
-                                                <span className="text-sm font-medium text-gray-900">
-                                                    {student.first_name} {student.last_name}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 px-6 text-sm text-gray-600">{student.email}</td>
-                                        <td className="py-3 px-6">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        setDeletedStudent(student);
-                                                    }}
-                                                    className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </td>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-140 w-full">
+                                <thead>
+                                    <tr className="bg-gra">
+                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">ID</th>
+                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Name</th>
+                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Email</th>
+                                        <th className="py-3 px-4 sm:px-6 text-right text-xs font-semibold text-navy uppercase tracking-wider">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                    {filteredStudents && filteredStudents.map((student) => (
+                                        <tr key={student.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="py-3 px-4 sm:px-6 text-sm text-gray-500 whitespace-nowrap">AW{student.id}</td>
+                                            <td className="py-3 px-4 sm:px-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-9 h-9 rounded-full bg-navy text-white flex items-center justify-center text-sm font-bold shrink-0">
+                                                        {student.first_name?.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                        {student.first_name} {student.last_name}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.email}</td>
+                                            <td className="py-3 px-4 sm:px-6">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            setDeletedStudent(student);
+                                                        }}
+                                                        className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors whitespace-nowrap">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
 
                         {filteredStudents && filteredStudents.length === 0 && (
-                            <div className="text-center py-12 text-gray-400">
+                            <div className="text-center py-12 text-gray-400 px-4">
                                 No students found.
                             </div>
                         )}
                     </div>
                 )}
                 {deletedStudent && (
-                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
                         <h2 className="text-lg font-bold text-navy mb-2">Remove Student</h2>
                         <p className="text-sm text-gray-600 mb-6">
@@ -130,15 +132,15 @@ export default function Students() {
                             </span>
                             ? This action cannot be undone.
                         </p>
-                        <div className="flex justify-end gap-2">
+                        <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
                             <button
                                 onClick={() => setDeletedStudent(null)}
-                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-full sm:w-auto">
                                 Cancel
                             </button>
                             <button
                                 onClick={onDelete}
-                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors">
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors w-full sm:w-auto">
                                 Delete
                             </button>
                         </div>
