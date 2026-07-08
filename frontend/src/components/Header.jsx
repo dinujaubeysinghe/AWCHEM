@@ -40,7 +40,7 @@ export default function Header() {
                             Student Portal
                         </div>
                         <div className="flex items-center gap-2 cursor-pointer font-bold text-white shrink-0">
-                            <Link to="https://wa.me/2348134567890" target="_blank">
+                            <Link to="https://wa.me/94775782011" target="_blank">
                                 <button className="hidden sm:block border border-yelo text-white px-3 md:px-4 py-1 md:py-1.5 rounded-xl hover:bg-yelo transition duration-300 mr-2 md:mr-4 cursor-pointer text-sm md:text-base">
                                     Support
                                 </button>

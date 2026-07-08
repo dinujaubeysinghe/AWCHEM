@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import HeroSection from '../assets/HeroSections.png'
+import HeroSection from '../assets/HeroSections.webp'
 import theory from '../assets/theory.webp'
 import shortNote from '../assets/short note.webp'
 import dailyReminders from '../assets/reminder.webp'
