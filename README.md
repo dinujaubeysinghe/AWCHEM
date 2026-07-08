@@ -1,60 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AWCHEM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A chemistry tutoring platform for A/L (Advanced Level) students, featuring Sinhala-language content, built with a Laravel API backend and a React frontend.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend:** Laravel 13 (REST API)
+- **Frontend:** React + Vite + Tailwind CSS v4
+- **HTTP Client:** Axios
+- **Icons:** lucide-react / react-icons
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Structure
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+AWCHEM/
+├── app/                    # Laravel backend (controllers, models, etc.)
+├── routes/
+│   └── api.php
+├── frontend/                # React + Vite application
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── context/          # AuthContext / AuthProvider
+│   │   ├── pages/
+│   │   │   └── admin/         # Admin dashboard pages
+│   │   └── axiosClient.js
+│   └── .env
+└── README.md
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+> The Laravel root and the React app are kept separate — the frontend lives in its own `frontend/` subfolder.
 
-## Contributing
+## Getting Started
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
 
-## Code of Conduct
+- PHP 8.2+
+- Composer
+- Node.js & npm
+- MySQL
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Backend Setup (Laravel)
 
-## Security Vulnerabilities
+```powershell
+cd D:\Projects\AWCHEM
+composer install
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve --port=8002
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The API will be available at `http://localhost:8002/api`.
+
+### Frontend Setup (React)
+
+```powershell
+cd D:\Projects\AWCHEM\frontend
+npm install
+npm run dev
+```
+
+The Vite dev server runs at `http://localhost:3000`. Note: this is **not** the app's entry point on its own — API calls are proxied/pointed to the Laravel server on port 8002.
+
+### Environment Variables
+
+In `frontend/.env`:
+
+```
+VITE_API_BASE_URL=http://localhost:8002/api
+```
+
+> Vite handles `.env` files natively via `import.meta.env` — no `dotenv` package is needed.
+
+## Features
+
+- **Authentication** — Email verification and password reset via Laravel's built-in `Password` facade
+- **Role-based access** — Separate `AdminLayout` and `StudentLayout`, driven by `user.is_admin`
+- **Admin dashboards** — Full CRUD for:
+  - Students
+  - Classes
+  - Quizzes
+  - Results
+- **Class enrollment system** — Confirmation modals requiring typed keywords ("enroll me" / "leave class")
+- **Quiz management** — `class_quizzes` pivot table with type-conditional fields (physical vs. online quizzes)
+- **Results tracking** — Unique constraint on `user_id` + `class_quiz_id`
+- **Notices** — Create/edit/delete modals for announcements
+- **Global notifications** — 5-second auto-dismiss notification pattern via `AuthContext`
+- **Fully responsive UI** — Homepage, Navbar, Header, and Sidebar
+
+## Key Architectural Notes
+
+- `student_classes` is used as a table name (instead of a more "obvious" name) to avoid a MySQL reserved word conflict.
+- The enrollment foreign key on `student_enrollments` is `student_class_id` (not `class_id`).
+- The `users()` relationship name on the `StudentClasses` model must stay consistent across `with('users')` and `whenLoaded('users', ...)` calls.
+- `GET /quizzes/all` must be declared **before** `Route::apiResource('quizzes', ...)` in `routes/api.php` — otherwise Laravel treats `"all"` as a `{quiz}` ID parameter.
+- All controllers live directly under `App\Http\Controllers\` (no `Api` subfolder).
+- The `User` model uses Laravel 13 attribute-based syntax (`#[Fillable]`, `#[Hidden]`).
+
+## Frontend Conventions
+
+- Modal dialogs are used for short forms (≲7 fields); separate pages are used for longer forms.
+- `Promise.all` is used for simultaneous API calls on dashboard/detail pages.
+- `localStorage` stores a `doneQuizzes` JSON array, shared between the dashboard and quizzes pages.
+- Tailwind v4 is configured via `@import "tailwindcss"` and `@theme` for custom color variables — no `tailwind.config.js` is required.
+
+### Brand Colors
+
+| Name   | Hex       |
+|--------|-----------|
+| Navy   | `#292940` |
+| Yellow | `#F5A446` |
+| Gray   | `#E2E6EE` |
+
+### Fonts
+
+- Custom Sinhala font: **Tharu Digital Sansala** (`.ttf`), placed in `public/` and referenced via an absolute URL in `@font-face`.
+
+## Known Issues / Roadmap
+
+- The hero section on the homepage currently uses a single flattened PNG (`HeroSections.png`) rather than layered HTML/CSS. This limits responsiveness and requires re-exporting the whole image from the original design file (Canva/Figma/Photoshop) for any text or layout tweak.
+  - **Planned improvement:** replace the flattened PNG with layered HTML/CSS components for better responsiveness and easier editing.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-
+_Add license information here._
