@@ -81,6 +81,7 @@ VITE_API_BASE_URL=http://localhost:8002/api
   - Classes
   - Quizzes
   - Results
+  - Notice
 - **Class enrollment system** — Confirmation modals requiring typed keywords ("enroll me" / "leave class")
 - **Quiz management** — `class_quizzes` pivot table with type-conditional fields (physical vs. online quizzes)
 - **Results tracking** — Unique constraint on `user_id` + `class_quiz_id`
@@ -123,4 +124,10 @@ VITE_API_BASE_URL=http://localhost:8002/api
 
 ## License
 
-_Add license information here._
+## License
+
+Copyright © 2026 AWCHEM. All rights reserved.
+
+This project and its source code are proprietary. No part of this
+repository may be copied, modified, distributed, or used without
+explicit written permission from the copyright holder.
