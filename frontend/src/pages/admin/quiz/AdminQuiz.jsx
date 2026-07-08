@@ -14,6 +14,82 @@ export default function AdminQuiz() {
     const [searchTerm, setSearchTerm] = useState('');
     const [quizToDelete, setQuizToDelete] = useState(null);
 
+    const [quizToEdit, setQuizToEdit] = useState(null);
+    const [showEditQuiz, setShowEditQuiz] = useState(false);
+    const [createQuiz , setCreateQuiz] = useState(false);
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+    });
+
+    const [editFormData, setEditFormData] = useState({
+        title: '',
+        description: '',
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+    
+    const handleEditChange = (e) => {
+        setEditFormData({
+            ...editFormData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleCreateQuiz = () => {
+        setLoading(true);
+        axiosClient.post('/quizzes', formData)
+            .then(({ data }) => {
+                setLoading(false);
+                setNotifications('Quiz created successfully.');
+                setCreateQuiz(false);
+                getQuizzes();
+            })
+            .catch((err) => {
+                setLoading(false);
+                setNotifications('Error occurred while creating quiz.');
+                console.error('Error occurred while creating quiz:', err);
+            });
+    }
+
+    const handleEditQuiz = () => {
+        setLoading(true);
+        axiosClient.put(`/quizzes/${quizToEdit.id}`, editFormData)
+            .then(({ data }) => {
+                setLoading(false);
+                setNotifications('Quiz updated successfully.');
+                setQuizToEdit(null);
+                setShowEditQuiz(false);
+                getQuizzes();
+            })
+            .catch((err) => {
+                setLoading(false);
+                setNotifications('Error occurred while updating quiz.');
+                console.error('Error occurred while updating quiz:', err);
+            });
+    }
+
+    const OpenEditQuizModal = (quiz) => {
+       axiosClient.get(`/quizzes/${id}`)
+            .then(({ data }) => {
+                setEditFormData({
+                    title: data.data.title,
+                    description: data.data.description
+                });
+                setQuizToEdit(quiz);
+                setShowEditQuiz(true);
+            })
+            .catch((err) => {
+                setNotifications('Error occurred while fetching quiz details.');
+                console.error('Error occurred while fetching quiz details:', err);
+            });
+    }   
+
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quiz.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,7 +148,7 @@ export default function AdminQuiz() {
                             className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full sm:w-64"
                         />
                         <button
-                            onClick={() => navigate('/admin/quizzes/create')}
+                            onClick={() => setCreateQuiz(true)}
                             className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors whitespace-nowrap">
                             <Plus className="w-4 h-4" />
                             Add Quiz
@@ -120,7 +196,7 @@ export default function AdminQuiz() {
                                             <button
                                                 onClick={(event) => {
                                                     event.stopPropagation()
-                                                    navigate(`/admin/quizzes/edit/${quiz.id}`)
+                                                    OpenEditQuizModal(quiz)
                                                 }}
                                                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
                                                 <Pencil className="w-3.5 h-3.5" />
@@ -171,6 +247,82 @@ export default function AdminQuiz() {
                                 onClick={onDelete}
                                 className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors">
                                 Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Create Quiz Modal */}
+            {createQuiz && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <h2 className="text-lg font-bold text-navy mb-2">Create Quiz</h2>
+                        <div className="flex flex-col gap-4 mb-6">
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Quiz Title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full"
+                            />
+                            <textarea
+                                name="description"
+                                placeholder="Quiz Description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full resize-none"
+                                rows={4}
+                            ></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setCreateQuiz(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleCreateQuiz}
+                                className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-navy/90 rounded-lg transition-colors">
+                                {loading ? 'Creating...' : 'Create'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Edit Quiz Modal */}
+            {showEditQuiz && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
+                        <h2 className="text-lg font-bold text-navy mb-2">Edit Quiz</h2>
+                        <div className="flex flex-col gap-4 mb-6">
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Quiz Title"
+                                value={editFormData.title}
+                                onChange={handleEditChange}
+                                className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full"
+                            />
+                            <textarea
+                                name="description"
+                                placeholder="Quiz Description"
+                                value={editFormData.description}
+                                onChange={handleEditChange}
+                                className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full resize-none"
+                                rows={4}
+                            ></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setShowEditQuiz(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleEditQuiz}
+                                className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-navy/90 rounded-lg transition-colors">
+                                {loading ? 'Updating...' : 'Update'}
                             </button>
                         </div>
                     </div>

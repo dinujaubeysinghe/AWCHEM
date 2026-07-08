@@ -13,6 +13,127 @@ export default function AdminClasses() {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [classToDelete, setClassToDelete] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [createClass, setCreateClass] = useState(false);
+    const [editClass, setEditClass] = useState(false);
+    const [showEditClass, setShowEditClass] = useState(false);
+
+    const [editFormData, setEditFormData] = useState({
+        id: '',
+        name: '',
+        batch: '',
+        location: '',
+        day: '',
+        start_time: '',
+        end_time: '',
+        ong_unit: ''
+    });
+
+    const initialFormData = {
+        name: '',
+        batch: '',
+        location: '',
+        day: '',
+        start_time: '',
+        end_time: '',
+        ong_unit: ''
+    };
+
+    const [formData, setFormData] = useState(initialFormData);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: null });
+    };
+
+    const handleEditChange = (e) => {
+        setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: null });
+    };
+
+    const convertTo24hr = (time) => {
+        if (!time) return '';
+        if (!time.includes('AM') && !time.includes('PM')) return time;
+        const [hourMin, period] = time.split(' ');
+        let [hours, minutes] = hourMin.split(':');
+        hours = parseInt(hours);
+        if (period === 'AM' && hours === 12) hours = 0;
+        if (period === 'PM' && hours !== 12) hours += 12;
+        return `${String(hours).padStart(2, '0')}:${minutes}`;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        axiosClient.post('/classes', formData)
+            .then(() => {
+                setLoading(false);
+                setNotifications('Class added successfully.');
+                setCreateClass(false);
+                setFormData(initialFormData);
+                setErrors({});
+                getClasses();
+            })
+            .catch((err) => {
+                setLoading(false);
+                if (err.response?.data?.errors) {
+                    setErrors(err.response.data.errors);
+                } else {
+                    setNotifications('Error occurred while adding class.');
+                }
+                console.error('Error occurred while adding class:', err);
+            });
+    }
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        const payload = {
+            ...editFormData,
+            start_time: convertTo24hr(editFormData.start_time),
+            end_time: convertTo24hr(editFormData.end_time)
+        };
+        axiosClient.put(`/classes/${editFormData.id}`, payload)
+            .then(() => {
+                setLoading(false);
+                setNotifications('Class updated successfully.');
+                setEditClass(false);
+                setShowEditClass(false);
+                getClasses();
+            })
+            .catch((err) => {
+                setLoading(false);
+                if (err.response?.data?.errors) {
+                    setErrors(err.response.data.errors);
+                } else {
+                    setNotifications('Error occurred while updating class.');
+                }
+                console.error('Error occurred while updating class:', err);
+            });
+    }
+
+    // Fetch a single class's details and open the edit modal pre-filled
+    const openEditModal = (cls) => {
+        axiosClient.get(`/classes/${cls.id}`)
+            .then(({ data }) => {
+                setEditFormData({
+                    id: data.id,
+                    name: data.name,
+                    batch: data.batch,
+                    location: data.location,
+                    day: data.day,
+                    start_time: data.start_time,
+                    end_time: data.end_time,
+                    ong_unit: data.ong_unit
+                });
+                setEditClass(true);
+                setShowEditClass(true);
+            })
+            .catch((err) => {
+                setNotifications('Error occurred while fetching class details.');
+                console.error('Error occurred while fetching class details:', err);
+            });
+    };
 
     const filteredClasses = classes.filter((cls) =>
         cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,7 +193,7 @@ export default function AdminClasses() {
                             className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full xs:w-56 sm:w-64"
                         />
                         <button
-                            onClick={() => navigate('/admin/classes/create')}
+                            onClick={() => setCreateClass(true)}
                             className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors whitespace-nowrap">
                             <Plus className="w-4 h-4" />
                             Add Class
@@ -136,8 +257,8 @@ export default function AdminClasses() {
                                         <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
                                             <button
                                                 onClick={(event) => {
-                                                    event.stopPropagation()
-                                                    navigate(`/admin/classes/edit/${cls.id}`)
+                                                    event.stopPropagation();
+                                                    openEditModal(cls);
                                                 }}
                                                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gra hover:bg-navy hover:text-white rounded-lg transition-colors">
                                                 <Pencil className="w-3.5 h-3.5" />
@@ -193,6 +314,291 @@ export default function AdminClasses() {
                     </div>
                 </div>
             )}
-        </div>
+            {/* Create Class Modal */}
+            {createClass && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg">
+                        <h2 className="text-lg font-bold text-navy mb-2">Add Class</h2>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Fill in the details to create a new class.
+                        </p>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+                            {/* Name */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Class Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Chemistry Advanced"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.name && <span className="text-xs text-red-500">{errors.name[0]}</span>}
+                            </div>
+
+                            {/* Batch */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Batch <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="batch"
+                                    value={formData.batch}
+                                    onChange={handleChange}
+                                    placeholder="e.g. 2024/25"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.batch && <span className="text-xs text-red-500">{errors.batch[0]}</span>}
+                            </div>
+                            {/* Location */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Location <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Room 101"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.location && <span className="text-xs text-red-500">{errors.location[0]}</span>}
+                            </div>
+                            {/* Day */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Day <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="day"
+                                    value={formData.day}
+                                    onChange={handleChange}
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                >
+                                    <option value="">Select a day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                                {errors.day && <span className="text-xs text-red-500">{errors.day[0]}</span>}
+                            </div>
+                            {/* Ong Unit */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Ongoing Unit <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="ong_unit"
+                                    value={formData.ong_unit}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Unit 1"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.ong_unit && <span className="text-xs text-red-500">{errors.ong_unit[0]}</span>}
+                            </div>
+                            {/* Start Time & End Time*/}
+                            <div className="flex gap-4">
+                                <div className="flex flex-col gap-1 flex-1">
+                                    <label className="text-sm font-medium text-navy">
+                                        Start Time <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="start_time"
+                                        value={formData.start_time}
+                                        onChange={handleChange}
+                                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                    />
+                                    {errors.start_time && <span className="text-xs text-red-500">{errors.start_time[0]}</span>}
+                                </div>
+                                <div className="flex flex-col gap-1 flex-1">
+                                    <label className="text-sm font-medium text-navy">
+                                        End Time <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="end_time"
+                                        value={formData.end_time}
+                                        onChange={handleChange}
+                                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                    />
+                                    {errors.end_time && <span className="text-xs text-red-500">{errors.end_time[0]}</span>}
+                                </div>
+                            </div>
+                            {/* Buttons */}
+                            <div className="flex justify-end gap-2 pt-4 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setCreateClass(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors disabled:opacity-50"
+                                >
+                                    {loading ? 'Saving...' : 'Add Class'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Edit Class Modal */}
+            {showEditClass && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg">
+                        <h2 className="text-lg font-bold text-navy mb-2">Edit Class</h2>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Update the details of the class.
+                        </p>
+                        <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+                            {/* Name */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Class Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={editFormData.name}
+                                    onChange={handleEditChange}
+                                    placeholder="e.g. Chemistry Advanced"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.name && <span className="text-xs text-red-500">{errors.name[0]}</span>}
+                            </div>
+
+                            {/* Batch */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Batch <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="batch"
+                                    value={editFormData.batch}
+                                    onChange={handleEditChange}
+                                    placeholder="e.g. 2024/25"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.batch && <span className="text-xs text-red-500">{errors.batch[0]}</span>}
+                            </div>
+                            {/* Location */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Location <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={editFormData.location}
+                                    onChange={handleEditChange}
+                                    placeholder="e.g. Room 101"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.location && <span className="text-xs text-red-500">{errors.location[0]}</span>}
+                            </div>
+                            {/* Day */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Day <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="day"
+                                    value={editFormData.day}
+                                    onChange={handleEditChange}
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                >
+                                    <option value="">Select a day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                                {errors.day && <span className="text-xs text-red-500">{errors.day[0]}</span>}
+                            </div>
+                            {/* Ong Unit */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Ongoing Unit <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="ong_unit"
+                                    value={editFormData.ong_unit}
+                                    onChange={handleEditChange}
+                                    placeholder="e.g. Unit 1"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.ong_unit && <span className="text-xs text-red-500">{errors.ong_unit[0]}</span>}
+                            </div>
+                            {/* Start Time & End Time*/}
+                            <div className="flex gap-4">
+                                <div className="flex flex-col gap-1 flex-1">
+                                    <label className="text-sm font-medium text-navy">
+                                        Start Time <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="start_time"
+                                        value={editFormData.start_time}
+                                        onChange={handleEditChange}
+                                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                    />
+                                    {errors.start_time && <span className="text-xs text-red-500">{errors.start_time[0]}</span>}
+                                </div>
+                                <div className="flex flex-col gap-1 flex-1">
+                                    <label className="text-sm font-medium text-navy">
+                                        End Time <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="end_time"
+                                        value={editFormData.end_time}
+                                        onChange={handleEditChange}
+                                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                    />
+                                    {errors.end_time && <span className="text-xs text-red-500">{errors.end_time[0]}</span>}
+                                </div>
+                            </div>
+                            {/* Buttons */}
+                            <div className="flex justify-end gap-2 pt-4 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowEditClass(false)}
+                                    className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors disabled:opacity-50"
+                                >
+                                    {loading ? 'Saving...' : 'Update Class'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div >
     )
 }
