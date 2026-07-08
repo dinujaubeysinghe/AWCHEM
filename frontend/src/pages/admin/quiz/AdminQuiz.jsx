@@ -48,6 +48,7 @@ export default function AdminQuiz() {
                 setLoading(false);
                 setNotifications('Quiz created successfully.');
                 setCreateQuiz(false);
+                setFormData({ title: '', description: '' });
                 getQuizzes();
             })
             .catch((err) => {
@@ -58,6 +59,7 @@ export default function AdminQuiz() {
     }
 
     const handleEditQuiz = () => {
+        if (!quizToEdit) return;
         setLoading(true);
         axiosClient.put(`/quizzes/${quizToEdit.id}`, editFormData)
             .then(({ data }) => {
@@ -75,25 +77,26 @@ export default function AdminQuiz() {
     }
 
     const OpenEditQuizModal = (quiz) => {
-       axiosClient.get(`/quizzes/${id}`)
-            .then(({ data }) => {
+       axiosClient.get(`/quizzes/${quiz.id}`)
+            .then((response) => {
+                // Guard against either { data: {...} } or a flat object response shape
+                const quizData = response.data?.data ?? response.data;
                 setEditFormData({
-                    title: data.data.title,
-                    description: data.data.description
+                    title: quizData.title,
+                    description: quizData.description
                 });
                 setQuizToEdit(quiz);
                 setShowEditQuiz(true);
             })
             .catch((err) => {
                 setNotifications('Error occurred while fetching quiz details.');
-                console.error('Error occurred while fetching quiz details:', err);
+                console.error('Error occurred while fetching quiz details:', err.response?.status, err.response?.data || err.message);
             });
     }   
 
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        quiz.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        quiz.location.toLowerCase().includes(searchTerm.toLowerCase())
+        quiz.description.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     useEffect(() => {

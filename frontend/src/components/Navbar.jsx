@@ -16,17 +16,17 @@ export default function Navbar() {
                     </a>
 
                     {/* Desktop Nav Links */}
-                    <div className="hidden md:flex space-x-10 lg:space-x-20 ml-10 text-gra">
-                        <a href="/">HOME</a>
-                        <a href="#about">ABOUT</a>
-                        <a href="#classes">CLASSES</a>
-                        <a href="#process">PROCESS</a>
+                    <div className="hidden md:flex space-x-10 lg:space-x-20 ml-10 text-gra ">
+                        <a href="/" className='hover:text-yelo transition-colors duration-300'>HOME</a>
+                        <a href="#about" className='hover:text-yelo transition-colors duration-300'>ABOUT</a>
+                        <a href="#classes" className='hover:text-yelo transition-colors duration-300'>CLASSES</a>
+                        <a href="#process" className='hover:text-yelo transition-colors duration-300'>PROCESS</a>
                     </div>
 
                     {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex space-x-2 ml-10">
-                        <a href="/login" className="border border-yelo text-yelo px-4 lg:px-6 py-2 rounded-full ml-4 lg:ml-10 text-sm lg:text-base">LOGIN</a>
-                        <a href="/signup" className="bg-yelo text-navy px-3 lg:px-4 py-2 rounded-full ml-2 lg:ml-4 text-sm lg:text-base">SIGN UP</a>
+                        <a href="/login" className="border border-yelo text-yelo hover:bg-yelo hover:text-navy px-4 lg:px-6 py-2 rounded-full ml-4 lg:ml-10 text-sm lg:text-base">LOGIN</a>
+                        <a href="/signup" className="bg-yelo text-navy hover:bg-yelo/80  px-3 lg:px-4 py-2 rounded-full ml-2 lg:ml-4 text-sm lg:text-base">SIGN UP</a>
                     </div>
 
                     {/* Mobile Hamburger */}
