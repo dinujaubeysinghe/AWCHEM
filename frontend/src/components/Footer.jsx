@@ -17,17 +17,17 @@ export default function Footer() {
                     </div>
 
                     <div className="flex space-x-4 mb-4">
-                        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-                            <FaYoutube className="text-white text-2xl sm:text-3xl hover:text-yelo transition duration-300" />
+                        <a href="https://www.youtube.com/@AsankaWedisinghe" target="_blank" rel="noopener noreferrer">
+                            <FaYoutube className="text-white text-2xl sm:text-3xl hover:text-[#FF0000] transition duration-300" />
                         </a>
-                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-                            <FaFacebook className="text-white text-2xl sm:text-3xl hover:text-yelo transition duration-300" />
+                        <a href="https://www.facebook.com/profile.php?id=100063778891470" target="_blank" rel="noopener noreferrer">
+                            <FaFacebook className="text-white text-2xl sm:text-3xl hover:text-[#1877F2] transition duration-300" />
                         </a>
-                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-                            <FaInstagram className="text-white text-2xl sm:text-3xl hover:text-yelo transition duration-300" />
+                        <a href="https://www.instagram.com/asanka_wedisinghe/" target="_blank" rel="noopener noreferrer">
+                            <FaInstagram className="text-white text-2xl sm:text-3xl hover:text-[#E1306C] transition duration-300" />
                         </a>
-                        <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
-                            <FaTiktok className="text-white text-2xl sm:text-3xl hover:text-yelo transition duration-300" />
+                        <a href="https://www.tiktok.com/@asanka_wedisinghe" target="_blank" rel="noopener noreferrer">
+                            <FaTiktok className="text-white text-2xl sm:text-3xl hover:text-[#000000] transition duration-300" />
                         </a>
                     </div>
 
