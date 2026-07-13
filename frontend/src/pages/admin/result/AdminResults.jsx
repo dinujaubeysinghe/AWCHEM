@@ -295,7 +295,7 @@ export default function AdminResults() {
                                                 <td className="py-3 px-4 sm:px-6">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-8 h-8 rounded-full bg-navy text-white flex items-center justify-center text-xs font-bold shrink-0">
-                                                            {result.student_name?.charAt(0).toUpperCase()}
+                                                            {result.student_name?.charAt(0)?.toUpperCase()}
                                                         </div>
                                                         <span className="text-sm font-medium text-gray-900 whitespace-nowrap">{result.student_name}</span>
                                                     </div>
