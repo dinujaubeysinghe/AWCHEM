@@ -8,6 +8,8 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClassWeekController;
+use App\Http\Controllers\WeekResourceController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +60,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/results', [ResultController::class, 'store']);
     Route::put('/results/{result}', [ResultController::class, 'update']);
     Route::delete('/results/{result}', [ResultController::class, 'destroy']);
+
+    Route::get('/classes/{classId}/weeks', [ClassWeekController::class, 'index']);
+    Route::post('/class-weeks', [ClassWeekController::class, 'store']);
+    Route::put('/class-weeks/{id}', [ClassWeekController::class, 'update']);
+    Route::delete('/class-weeks/{id}', [ClassWeekController::class, 'destroy']);
+
+    Route::post('/week-resources', [WeekResourceController::class, 'store']);
+    Route::put('/week-resources/{id}', [WeekResourceController::class, 'update']);
+    Route::delete('/week-resources/{id}', [WeekResourceController::class, 'destroy']);
 
      Route::post('/email/verification-notification', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {

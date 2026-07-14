@@ -24,6 +24,7 @@ import StudentDashboard from './pages/students/StudentDashboard'
 import StudentClasses from './pages/students/StudentClasses'
 import StudentQuizzes from './pages/students/StudentQuizzes'
 import StudentResults from './pages/students/StudentResult'
+import StudentClassProgress from './pages/students/StudentClassProgress'
 
 import { useAuth } from './context/AuthContext'
 
@@ -64,6 +65,7 @@ function App() {
           <Route path='quizzes' element={<StudentQuizzes />} />
           <Route path='results' element={<StudentResults />} />
           <Route path='settings' element={<ProfileSettings />} />
+          <Route path='classes/:id/progress' element={<StudentClassProgress />} />
         </Route>
       </Routes>
     </>

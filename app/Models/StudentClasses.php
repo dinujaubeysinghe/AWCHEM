@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\StudentEnrollment;
 use App\Models\User;
 
-#[Fillable(['name', 'batch', 'location', 'day', 'start_time', 'end_time', 'ong_unit'])]
+#[Fillable(['name', 'batch', 'location', 'day', 'start_time', 'end_time', 'ong_unit', 'start_date'])]
 class StudentClasses extends Model
 { 
 

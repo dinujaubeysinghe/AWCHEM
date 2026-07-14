@@ -24,6 +24,7 @@ export default function AdminClasses() {
         batch: '',
         location: '',
         day: '',
+        start_date: '',
         start_time: '',
         end_time: '',
         ong_unit: ''
@@ -34,6 +35,7 @@ export default function AdminClasses() {
         batch: '',
         location: '',
         day: '',
+        start_date: '',
         start_time: '',
         end_time: '',
         ong_unit: ''
@@ -122,6 +124,7 @@ export default function AdminClasses() {
                     batch: data.batch,
                     location: data.location,
                     day: data.day,
+                    start_date: data.start_date,
                     start_time: data.start_time,
                     end_time: data.end_time,
                     ong_unit: data.ong_unit
@@ -392,6 +395,20 @@ export default function AdminClasses() {
                                 </select>
                                 {errors.day && <span className="text-xs text-red-500">{errors.day[0]}</span>}
                             </div>
+                            {/* Start Date */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Start Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="date"
+                                    name="start_date"
+                                    value={formData.start_date}
+                                    onChange={handleChange}
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.start_date && <span className="text-xs text-red-500">{errors.start_date[0]}</span>}
+                            </div>
                             {/* Ong Unit */}
                             <div className="flex flex-col gap-1">
                                 <label className="text-sm font-medium text-navy">
@@ -533,6 +550,20 @@ export default function AdminClasses() {
                                     <option value="Sunday">Sunday</option>
                                 </select>
                                 {errors.day && <span className="text-xs text-red-500">{errors.day[0]}</span>}
+                            </div>
+                            {/* Start Date */}
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Start Date <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="date"
+                                    name="start_date"
+                                    value={editFormData.start_date}
+                                    onChange={handleEditChange}
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                                {errors.start_date && <span className="text-xs text-red-500">{errors.start_date[0]}</span>}
                             </div>
                             {/* Ong Unit */}
                             <div className="flex flex-col gap-1">

@@ -33,6 +33,7 @@ class StudentClassesController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'ong_unit' => 'required|string|max:100',
+            'start_date' => 'required|date',
         ]);
 
         $studentClass = StudentClasses::create($date);
@@ -62,6 +63,7 @@ class StudentClassesController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'ong_unit' => 'required|string|max:100',
+            'start_date' => 'required|date',
         ]);
         $studentClass = StudentClasses::findOrFail($id);
         $studentClass->update($date);

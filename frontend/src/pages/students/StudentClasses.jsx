@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import axiosClient from '../axiosClient'
 import { BookOpen, MapPin, Clock, CalendarDays, LogIn, LogOut } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export default function StudentClasses() {
+
+    const navigate = useNavigate()
 
     const { setNotifications } = useAuth()
     const [myClasses, setMyClasses] = useState([])
@@ -88,8 +91,11 @@ export default function StudentClasses() {
         cls.location?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
-    const ClassCard = ({ cls, isEnrolled }) => (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+    const ClassCard = ({ cls, isEnrolled, onViewProgress }) => (
+        <div
+            className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow"
+            onClick={() => isEnrolled && onViewProgress(cls.id)}
+        >
             {/* Card Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -173,7 +179,12 @@ export default function StudentClasses() {
                     {myClasses.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {myClasses.map((cls) => (
-                                <ClassCard key={cls.id} cls={cls} isEnrolled={true} />
+                                <ClassCard
+                                    key={cls.id}
+                                    cls={cls}
+                                    isEnrolled={true}
+                                    onViewProgress={(id) => navigate(`/student/classes/${id}/progress`)}
+                                />
                             ))}
                         </div>
                     ) : (
