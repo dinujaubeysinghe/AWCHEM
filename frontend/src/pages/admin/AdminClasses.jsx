@@ -250,10 +250,6 @@ export default function AdminClasses() {
                                                 <Clock className="w-4 h-4 text-yelo shrink-0" />
                                                 <span>{cls.start_time} — {cls.end_time}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                <Book className="w-4 h-4 text-yelo shrink-0" />
-                                                <span>Ongoing Unit : {cls.ong_unit}</span>
-                                            </div>
                                         </div>
 
                                         {/* Card Actions */}

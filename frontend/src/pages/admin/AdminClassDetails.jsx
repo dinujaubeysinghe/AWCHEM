@@ -650,7 +650,7 @@ export default function AdminClassDetails() {
                                         className="border border-gray-200 rounded-xl overflow-hidden"
                                     >
                                         <div
-                                            className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                                            className="flex items-center justify-between px-5 py-4 cursor-pointer bg-gray-100 transition-colors"
                                             onClick={() => toggleWeek(week.id)}
                                         >
                                             <div className="flex items-center gap-3">
