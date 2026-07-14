@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../context/AuthContext'
 import axiosClient from '../../axiosClient'
 import { TrendingUp, Plus, Trash2, Pencil, Save } from 'lucide-react'
-
+import StudentCombobox from '../../../components/admin/StudentCombobox'
 export default function AdminResults() {
 
     const { setNotifications } = useAuth()
@@ -202,18 +202,11 @@ export default function AdminResults() {
                                 <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-gray-50 rounded-xl">
 
                                     {/* Student */}
-                                    <select
+                                    <StudentCombobox
+                                        students={enrolledStudents}
                                         value={record.user_id}
-                                        onChange={(e) => handleRecordChange(index, 'user_id', e.target.value)}
-                                        className="w-full sm:flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
-                                    >
-                                        <option value="">Select Student</option>
-                                        {enrolledStudents.map((student) => (
-                                            <option key={student.id} value={student.id}>
-                                                {student.first_name} {student.last_name}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        onChange={(id) => handleRecordChange(index, 'user_id', id)}
+                                    />
 
                                     {/* Quiz */}
                                     <select
@@ -303,11 +296,10 @@ export default function AdminResults() {
                                                 <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{result.quiz_title}</td>
                                                 <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{result.quiz_date}</td>
                                                 <td className="py-3 px-4 sm:px-6">
-                                                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${
-                                                        result.marks >= 75 ? 'bg-green-100 text-green-700' :
-                                                        result.marks >= 50 ? 'bg-yellow-100 text-yellow-600' :
-                                                        'bg-red-100 text-red-600'
-                                                    }`}>
+                                                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${result.marks >= 75 ? 'bg-green-100 text-green-700' :
+                                                            result.marks >= 50 ? 'bg-yellow-100 text-yellow-600' :
+                                                                'bg-red-100 text-red-600'
+                                                        }`}>
                                                         {result.marks}%
                                                     </span>
                                                 </td>
