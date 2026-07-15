@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\StudentClassesResource;
 use App\Models\StudentClasses;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class StudentClassesController extends Controller
 {
@@ -32,9 +33,11 @@ class StudentClassesController extends Controller
             'day' => 'required|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'ong_unit' => 'required|string|max:100',
-            'start_date' => 'required|date',
+            'ong_unit' => 'nullable|string|max:100',
+            'start_date' => 'required|date|after_or_equal:today',
         ]);
+
+        $this->checkScheduleConflict($date);
 
         $studentClass = StudentClasses::create($date);
         return response(new StudentClassesResource($studentClass), 201);
@@ -62,12 +65,34 @@ class StudentClassesController extends Controller
             'day' => 'required|string|max:20',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'ong_unit' => 'required|string|max:100',
+            'ong_unit' => 'nullable|string|max:100',
             'start_date' => 'required|date',
         ]);
+
+        $this->checkScheduleConflict($date, $id);
+
         $studentClass = StudentClasses::findOrFail($id);
         $studentClass->update($date);
         return new StudentClassesResource($studentClass);
+    }
+
+    /**
+     * Throw a validation error if another class exists in the same
+     * location, on the same day, with an overlapping time range.
+     */
+    private function checkScheduleConflict(array $data, ?string $excludeId = null): void
+    {
+    $conflict = StudentClasses::where('day', $data['day'])
+        ->when($excludeId, fn ($query) => $query->where('id', '!=', $excludeId))
+        ->where('start_time', '<', $data['end_time'])
+        ->where('end_time', '>', $data['start_time'])
+        ->first();
+
+    if ($conflict) {
+        throw ValidationException::withMessages([
+            'start_time' => "This clashes with \"{$conflict->name}\" ({$conflict->start_time}–{$conflict->end_time}) already scheduled on {$data['day']} in {$conflict->location}.",
+        ]);
+    }
     }
 
     /**
@@ -77,13 +102,14 @@ class StudentClassesController extends Controller
     {
         $studentClass = StudentClasses::findOrFail($id);
         $studentClass->delete();
-        return response( "" , 204);
+        return response("", 204);
     }
+
     public function removeStudent($classId, $studentId)
     {
         $studentClass = StudentClasses::findOrFail($classId);
         $studentClass->users()->detach($studentId);
 
-        return response( "" , 204);
+        return response("", 204);
     }
 }

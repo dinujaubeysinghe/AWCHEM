@@ -34,7 +34,7 @@ public function store(Request $request, $classId)
 
         'type' => 'required|in:physical,online',
 
-        'date' => 'required|date',
+        'date' => 'required|date|after_or_equal:today',
 
         'duration' => 'required|integer|min:1',
 
@@ -84,7 +84,7 @@ public function update(Request $request, $classId, $quizId)
 
         'type' => 'required|in:physical,online',
 
-        'date' => 'required|date',
+        'date' => 'required|date|after_or_equal:today',
 
         'duration' => 'required|integer|min:1',
 

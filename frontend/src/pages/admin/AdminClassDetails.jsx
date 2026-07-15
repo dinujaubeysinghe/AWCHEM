@@ -275,8 +275,12 @@ export default function AdminClassDetails() {
             })
             .catch((err) => {
                 setAssignLoading(false)
-                setNotifications('Error occurred while assigning quiz to class.')
-                console.error('Error occurred while assigning quiz to class:', err)
+                if (err.response?.data?.errors) {
+                    setErrors(err.response.data.errors)
+                } else {
+                    setNotifications('Error occurred while assigning quiz.')
+                }
+                console.error(err)
             })
     }
     const handleEditSubmit = () => {
