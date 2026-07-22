@@ -93,7 +93,7 @@ export default function StudentClasses() {
 
     const ClassCard = ({ cls, isEnrolled, onViewProgress }) => (
         <div
-            className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow"
+            className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow ${isEnrolled ? 'cursor-pointer' : ''}`}
             onClick={() => isEnrolled && onViewProgress(cls.id)}
         >
             {/* Card Header */}
@@ -127,27 +127,27 @@ export default function StudentClasses() {
                 </div>
             </div>
 
-            {/* Ongoing Unit */}
-            {cls.ong_unit && (
-                <div className="bg-gray-50 rounded-lg px-3 py-2 mb-4">
-                    <p className="text-xs text-gray-500">Ongoing Unit</p>
-                    <p className="text-sm text-navy font-medium">{cls.ong_unit}</p>
-                </div>
-            )}
-
             {/* Action Button */}
             <div className="pt-3 border-t border-gray-100">
                 {isEnrolled ? (
                     <button
-                        onClick={() => { setUnenrollingClass(cls); setKeyError(''); }}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setUnenrollingClass(cls)
+                            setKeyError('')
+                        }}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors cursor-pointer">
                         <LogOut className="w-3.5 h-3.5" />
                         Unenroll
                     </button>
                 ) : (
                     <button
-                        onClick={() => { setEnrollingClass(cls); setKeyError(''); }}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors">
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setEnrollingClass(cls)
+                            setKeyError('')
+                        }}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors cursor-pointer">
                         <LogIn className="w-3.5 h-3.5" />
                         Enroll
                     </button>
