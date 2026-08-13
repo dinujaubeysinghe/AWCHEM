@@ -159,7 +159,7 @@ export default function Login() {
                         {/* Submit button */}
                         <button
                             type="submit"
-                            className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300">
+                            className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 cursor-pointer">
                             Login
                         </button>
 

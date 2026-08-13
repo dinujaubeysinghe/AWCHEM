@@ -213,7 +213,7 @@ export default function Signup() {
 
           <button
           type="submit"
-          className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 w-full"
+          className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 w-full cursor-pointer"
           >
             Register
             </button>
