@@ -147,13 +147,6 @@ export default function AdminDashboard() {
 
     const noticeToDelete = notices.find(n => n.id === deleteNoticeId) ?? null
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-            </div>
-        )
-    }
 
     return (
         <div className="p-4 sm:p-6">

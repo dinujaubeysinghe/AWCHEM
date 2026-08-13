@@ -343,13 +343,6 @@ export default function AdminClassDetails() {
             : <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">Physical</span>
     }
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-            </div>
-        )
-    }
 
     if (!classDetails) {
         return (

@@ -160,15 +160,10 @@ export default function AdminQuiz() {
                 </div>
 
                 {/* Content */}
-                {loading ? (
-                    <div className="flex items-center justify-center py-20">
-                        <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-                    </div>
-                ) : (
-                    <>
-                        {/* Cards Grid */}
-                        {filteredQuizzes.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <>
+                    {/* Cards Grid */}
+                    {filteredQuizzes.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {filteredQuizzes.map((quiz) => (
                                     <div
                                         key={quiz.id}
@@ -224,8 +219,7 @@ export default function AdminQuiz() {
                                 <p className="text-sm">No quizzes found.</p>
                             </div>
                         )}
-                    </>
-                )}
+                </>
             </main>
 
             {/* Delete Confirmation Modal */}

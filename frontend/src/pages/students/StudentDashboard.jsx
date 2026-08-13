@@ -37,44 +37,26 @@ export default function StudentDashboard() {
   }
 
   useEffect(() => {
-    getDashboardData()
-    getNotices()
-  }, [])
-
-  const getDashboardData = () => {
     setLoading(true)
     Promise.all([
-      axiosClient.get('/my/classes'),
-      axiosClient.get('/my/quizzes'),
-      axiosClient.get('/my/results'),
+      axiosClient.get('/my/dashboard'),
+      axiosClient.get('/notices'),
     ])
-      .then(([classesRes, quizzesRes, resultsRes]) => {
+      .then(([dashRes, noticesRes]) => {
         setLoading(false)
-        setMyClasses(Array.isArray(classesRes.data) ? classesRes.data : classesRes.data.data ?? [])
-        setMyQuizzes(Array.isArray(quizzesRes.data) ? quizzesRes.data : quizzesRes.data.data ?? [])
-        setMyResults(Array.isArray(resultsRes.data) ? resultsRes.data : resultsRes.data.data ?? [])
+        const dash = dashRes.data
+        setMyClasses(Array.isArray(dash.classes) ? dash.classes : dash.classes?.data ?? [])
+        setMyQuizzes(Array.isArray(dash.quizzes) ? dash.quizzes : dash.quizzes?.data ?? [])
+        setMyResults(Array.isArray(dash.results) ? dash.results : dash.results?.data ?? [])
+        setNotices(noticesRes.data.data ?? [])
       })
       .catch((err) => {
         setLoading(false)
         setNotifications('Error occurred while fetching dashboard data.')
         console.error(err)
       })
-  }
+  }, [])
 
-  const getNotices = () => {
-    setLoading(true)
-    axiosClient.get('/notices')
-      .then(({ data }) => {
-        setLoading(false)
-        setNotices(data.data)
-        console.log('Notice data fetched:', data);
-      })
-      .catch((err) => {
-        setLoading(false)
-        setNotifications('Error occurred while fetching notice data.')
-        console.error('Error occurred while fetching notice data:', err)
-      })
-  }
 
   const getTypeBadge = (type) => {
     return type === 'online'
@@ -82,13 +64,6 @@ export default function StudentDashboard() {
       : <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">Physical</span>
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-      </div>
-    )
-  }
 
   return (
     <div className="p-6">

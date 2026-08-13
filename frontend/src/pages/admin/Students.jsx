@@ -65,62 +65,56 @@ export default function Students() {
                         className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full sm:w-64" />
                 </div>
 
-                {loading ? (
-                    <div className="flex items-center justify-center py-20">
-                        <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-                    </div>
-                ) : (
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="min-w-140 w-full">
-                                <thead>
-                                    <tr className="bg-gra">
-                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">ID</th>
-                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Name</th>
-                                        <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Email</th>
-                                        <th className="py-3 px-4 sm:px-6 text-right text-xs font-semibold text-navy uppercase tracking-wider">Actions</th>
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-140 w-full">
+                            <thead>
+                                <tr className="bg-gra">
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">ID</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Name</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Email</th>
+                                    <th className="py-3 px-4 sm:px-6 text-right text-xs font-semibold text-navy uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {filteredStudents && filteredStudents.map((student) => (
+                                    <tr key={student.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-500 whitespace-nowrap">AW{student.id}</td>
+                                        <td className="py-3 px-4 sm:px-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-9 h-9 rounded-full bg-navy text-white flex items-center justify-center text-sm font-bold shrink-0">
+                                                    {student.first_name?.charAt(0)?.toUpperCase()}
+                                                </div>
+                                                <span className="text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                    {student.first_name} {student.last_name}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.email}</td>
+                                        <td className="py-3 px-4 sm:px-6">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        setDeletedStudent(student);
+                                                    }}
+                                                    className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors whitespace-nowrap">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {filteredStudents && filteredStudents.map((student) => (
-                                        <tr key={student.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="py-3 px-4 sm:px-6 text-sm text-gray-500 whitespace-nowrap">AW{student.id}</td>
-                                            <td className="py-3 px-4 sm:px-6">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-9 h-9 rounded-full bg-navy text-white flex items-center justify-center text-sm font-bold shrink-0">
-                                                        {student.first_name?.charAt(0)?.toUpperCase()}
-                                                    </div>
-                                                    <span className="text-sm font-medium text-gray-900 whitespace-nowrap">
-                                                        {student.first_name} {student.last_name}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.email}</td>
-                                            <td className="py-3 px-4 sm:px-6">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <button
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                            setDeletedStudent(student);
-                                                        }}
-                                                        className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-500 hover:text-white rounded-lg transition-colors whitespace-nowrap">
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {filteredStudents && filteredStudents.length === 0 && (
-                            <div className="text-center py-12 text-gray-400 px-4">
-                                No students found.
-                            </div>
-                        )}
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                )}
+
+                    {filteredStudents && filteredStudents.length === 0 && (
+                        <div className="text-center py-12 text-gray-400 px-4">
+                            No students found.
+                        </div>
+                    )}
+                </div>
                 {deletedStudent && (
                     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">

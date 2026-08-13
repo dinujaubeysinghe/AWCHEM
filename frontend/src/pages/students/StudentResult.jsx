@@ -60,13 +60,6 @@ export default function StudentResult() {
         return { total, best, passRate }
     }, [results])
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-            </div>
-        )
-    }
 
     const markBadge = (marks) =>
         marks >= 65 ? 'bg-green-100 text-green-700' :

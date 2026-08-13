@@ -28,13 +28,10 @@ export default function StudentClasses() {
 
     const getAllClasses = () => {
         setLoading(true);
-        Promise.all([
-            axiosClient.get('/my/classes'),
-            axiosClient.get('/available/classes')
-        ])
-            .then(([myRes, availableRes]) => {
-                setMyClasses(myRes.data.data);
-                setAvailableClasses(availableRes.data.data);
+        axiosClient.get('/my/classes-data')
+            .then(({ data }) => {
+                setMyClasses(data.my_classes?.data ?? data.my_classes ?? []);
+                setAvailableClasses(data.available_classes?.data ?? data.available_classes ?? []);
                 setLoading(false);
             })
             .catch((err) => {
@@ -156,13 +153,6 @@ export default function StudentClasses() {
         </div>
     )
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 border-4 border-navy border-t-yelo rounded-full animate-spin"></div>
-            </div>
-        )
-    }
 
     return (
         <div className="p-6">
