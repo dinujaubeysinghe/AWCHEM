@@ -285,14 +285,14 @@ export default function AdminDashboard() {
                         <h2 className="text-sm font-bold text-navy mb-4">Quick Actions</h2>
                         <div className="flex flex-col gap-2">
                             <button
-                                onClick={() => navigate('/admin/classes/create')}
+                                onClick={() => navigate('/admin/classes')}
                                 className="w-full text-left px-4 py-2.5 text-sm font-medium text-navy bg-gray-50 hover:bg-navy hover:text-white rounded-lg transition-colors flex items-center justify-between"
                             >
                                 <span>+ Create Class</span>
                                 <ArrowRight className="w-4 h-4" />
                             </button>
                             <button
-                                onClick={() => navigate('/admin/quizzes/create')}
+                                onClick={() => navigate('/admin/quizzes')}
                                 className="w-full text-left px-4 py-2.5 text-sm font-medium text-navy bg-gray-50 hover:bg-navy hover:text-white rounded-lg transition-colors flex items-center justify-between"
                             >
                                 <span>+ Create Quiz</span>
