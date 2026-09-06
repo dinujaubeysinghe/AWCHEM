@@ -70,16 +70,17 @@ export default function Students() {
                         <table className="min-w-140 w-full">
                             <thead>
                                 <tr className="bg-gra">
-                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">ID</th>
                                     <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Name</th>
-                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Email</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Whatsapp</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">NIC</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">School</th>
+                                    <th className="py-3 px-4 sm:px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Guardian Phone</th>
                                     <th className="py-3 px-4 sm:px-6 text-right text-xs font-semibold text-navy uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 {filteredStudents && filteredStudents.map((student) => (
                                     <tr key={student.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-500 whitespace-nowrap">AW{student.id}</td>
                                         <td className="py-3 px-4 sm:px-6">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-9 h-9 rounded-full bg-navy text-white flex items-center justify-center text-sm font-bold shrink-0">
@@ -90,7 +91,10 @@ export default function Students() {
                                                 </span>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.email}</td>
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.whatsapp}</td>
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.nic}</td>
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.school}</td>
+                                        <td className="py-3 px-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">{student.guardian_phone}</td>
                                         <td className="py-3 px-4 sm:px-6">
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
