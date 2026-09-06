@@ -10,7 +10,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'asanka.w@gmail.com'],
+            ['email' => 'admin.asanka@gmail.com'],
             [
                 'first_name' => 'Asanka',
                 'last_name' => 'Wedisinghe',
@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
                 'is_admin' => true,
                 'address' => 'N/A',
                 'whatsapp' => 'N/A',
-                'nic' => 'ADMIN000001',
+                'nic' => 'ADMIN',
                 'guardian_name' => 'N/A',
                 'guardian_phone' => 'N/A',
             ]
