@@ -12,9 +12,9 @@ export default function Header() {
         <>
             {user?.is_admin === true && (
                 <div className="bg-navy text-white py-4 md:py-6 border-b border-gray-700 rounded-xl shadow-md mx-2 md:mx-4">
-                    <div className="flex items-center justify-between gap-2 md:gap-4 px-4 md:px-8">
+                    <div className="flex items-center justify-between gap-2 pl-14 pr-4 md:gap-4 md:px-8">
                         <Link to="/admin/dashboard" 
-                        className="text-xl md:text-3xl font-sansala text-white shrink-0 cursor-pointer">
+                        className="text-xl md:text-3xl font-sansala text-white shrink-0 cursor-pointer sm:text-center">
                             wixl <span className="text-yelo font-sansala ">jeÈisxy</span>
                         </Link>
                         <div className="hidden sm:block text-lg md:text-3xl font-bold">
@@ -23,8 +23,10 @@ export default function Header() {
                         <Link
                             to="/admin/settings"
                             className="flex items-center gap-2 cursor-pointer font-bold text-white shrink-0 text-sm md:text-base"
+                            aria-label="Open profile settings"
                         >
-                            Hi, {user?.first_name} <User className="w-4 h-4 md:w-5 md:h-5" />
+                            <span className="hidden sm:inline">Hi, {user?.first_name}</span>
+                            <User className="w-4 h-4 md:w-5 md:h-5" />
                         </Link>
                     </div>
                 </div>
@@ -32,7 +34,7 @@ export default function Header() {
 
             {user?.is_admin === false && (
                 <div className="bg-navy text-white py-4 md:py-6 border-b border-gray-700 rounded-xl shadow-md mx-2 md:mx-4">
-                    <div className="flex items-center justify-between gap-2 md:gap-4 px-4 md:px-8">
+                    <div className="flex items-center justify-between gap-2 pl-14 pr-4 md:gap-4 md:px-8">
                         <Link to="/student/dashboard" className="text-xl md:text-3xl font-sansala text-white shrink-0 cursor-pointer">
                             wixl <span className="text-yelo font-sansala">jeÈisxy</span>
                         </Link>
@@ -48,8 +50,10 @@ export default function Header() {
                             <Link
                                 to="/student/settings"
                                 className="flex items-center gap-2 cursor-pointer font-bold text-white text-sm md:text-base"
+                                aria-label="Open profile settings"
                             >
-                                Hi, {user?.first_name} <User className="w-4 h-4 md:w-5 md:h-5" />
+                                <span className="hidden sm:inline">Hi, {user?.first_name}</span>
+                                <User className="w-4 h-4 md:w-5 md:h-5" />
                             </Link>
                         </div>
                     </div>
