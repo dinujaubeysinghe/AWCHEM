@@ -24,6 +24,8 @@ class UserResource extends JsonResource
             'whatsapp'       => $this->whatsapp,
             'address'        => $this->address,
             'nic'            => $this->nic,
+            'school'         => $this->school,
+            'school_district' => $this->school_district,
             'guardian_name'  => $this->guardian_name,
             'guardian_phone' => $this->guardian_phone,
         ];

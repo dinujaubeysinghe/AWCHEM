@@ -19,10 +19,20 @@ export default function Signup() {
     const addressRef = useRef();
     const whatsappRef = useRef();
     const nicRef = useRef();
+    const schoolRef = useRef();
+    const schoolDistrictRef = useRef();
     const guardianNameRef = useRef();
     const guardianPhoneRef = useRef();
 
     const navigate = useNavigate();
+
+    const districts = [
+        "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
+        "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
+        "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
+        "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
+        "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"
+    ];
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -35,6 +45,8 @@ export default function Signup() {
             address: addressRef.current.value,
             whatsapp: whatsappRef.current.value,
             nic: nicRef.current.value,
+            school: schoolRef.current.value,
+            school_district: schoolDistrictRef.current.value,
             guardian_name: guardianNameRef.current.value,
             guardian_phone: guardianPhoneRef.current.value
         };
@@ -183,6 +195,35 @@ export default function Signup() {
               placeholder="NIC"
               className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
               ref={nicRef}/>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
+            <div className="flex flex-col flex-1">
+              <div className="flex ml-1">
+                <label className="text-base sm:text-lg text-navy">School</label>
+                <span className="text-red-500 ml-1">*</span>
+              </div>
+              <input
+              type="text"
+              placeholder="School"
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              ref={schoolRef}/>
+            </div>
+            <div className="flex flex-col flex-1">
+              <div className="flex ml-1">
+                <label className="text-base sm:text-lg text-navy">School District</label>
+                <span className="text-red-500 ml-1">*</span>
+              </div>
+              <select
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full bg-white"
+              ref={schoolDistrictRef}
+              defaultValue="">
+                <option value="" disabled>Select District</option>
+                {districts.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
             </div>
           </div>
 

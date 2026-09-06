@@ -39,6 +39,8 @@ class SignupRequest extends FormRequest
             'address' => 'required|string|max:255',
             'whatsapp' => 'required|string|max:15',
             'nic' => 'required|string|max:12|unique:users,nic',
+            'school' => 'required|string|max:255',
+            'school_district' => 'required|string|max:100',
             'guardian_name' => 'required|string|max:30',
             'guardian_phone' => 'required|string|max:15',
         ];

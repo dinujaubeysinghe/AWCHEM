@@ -49,6 +49,8 @@ class AuthController extends Controller
         'address' => $data['address'],
         'whatsapp' => $data['whatsapp'],
         'nic' => $data['nic'],
+        'school' => $data['school'],
+        'school_district' => $data['school_district'],
         'guardian_name' => $data['guardian_name'],
         'guardian_phone' => $data['guardian_phone'],
     ]);
