@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import axiosClient from '../axiosClient'
 import {
     BookOpen, MapPin, Clock, CalendarDays, Users, ArrowLeft, Clock3, Pencil, Plus, ClipboardList,
-    Globe, Trash2, ClipboardCheck, Link2, FileText, ChevronDown, ChevronUp, X
+    Globe, Trash2, ClipboardCheck, Link2, FileText, ChevronDown, ChevronUp, X, Search
 } from 'lucide-react'
 
 export default function AdminClassDetails() {
@@ -14,6 +14,7 @@ export default function AdminClassDetails() {
     const { setNotifications } = useAuth()
     const [classDetails, setClassDetails] = useState(null)
     const [studentToRemove, setStudentToRemove] = useState(null)
+    const [studentSearch, setStudentSearch] = useState('')
     const [loading, setLoading] = useState(false)
 
     const [activeTab, setActiveTab] = useState('details') // 'details' | 'progress'
@@ -352,6 +353,13 @@ export default function AdminClassDetails() {
         )
     }
 
+    const filteredStudents = (classDetails.users ?? []).filter((student) => {
+        const query = studentSearch.trim().toLowerCase()
+        if (!query) return true
+        return [student.first_name, student.last_name, student.email, student.whatsapp]
+            .some((value) => String(value ?? '').toLowerCase().includes(query))
+    })
+
     return (
         <div className="min-w-0 p-4 sm:p-6">
 
@@ -417,7 +425,7 @@ export default function AdminClassDetails() {
                                 <BookOpen className="w-5 h-5" />
                             </div>
                             <div>
-                                <h2 className="text-sm font-bold text-navy">{classDetails.name}</h2>
+                                <h2 className="text-sm font-bold text-navy">Class Overview</h2>
                                 <span className="text-xs text-white bg-yelo px-2 py-0.5 rounded-full">
                                     {classDetails.batch}
                                 </span>
@@ -455,12 +463,6 @@ export default function AdminClassDetails() {
                             </div>
                         </div>
 
-                        {classDetails.ong_unit && (
-                            <div className="mt-4 pt-4 border-t border-gray-100">
-                                <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Ongoing Unit</p>
-                                <p className="text-sm text-navy font-medium">{classDetails.ong_unit}</p>
-                            </div>
-                        )}
                     </div>
 
                     {/* Quiz Assignments */}
@@ -562,18 +564,70 @@ export default function AdminClassDetails() {
 
                     {/* Enrolled Students */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mt-6">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                            <div className="flex items-center gap-2">
-                                <Users className="w-5 h-5 text-yelo" />
-                                <h2 className="text-sm font-bold text-navy">Enrolled Students</h2>
+                        <div className="flex flex-col gap-3 px-4 sm:px-6 py-4 border-b border-gray-100 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                    <Users className="w-5 h-5 text-yelo" />
+                                    <h2 className="text-sm font-bold text-navy">Enrolled Students</h2>
+                                </div>
+                                <span className="text-xs text-gray-400 sm:hidden">
+                                    {filteredStudents.length} / {classDetails.users?.length || 0}
+                                </span>
                             </div>
-                            <span className="text-xs text-gray-400">
-                                {classDetails.users?.length || 0} student{classDetails.users?.length !== 1 ? 's' : ''}
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <label className="relative block min-w-0 flex-1 sm:w-64 sm:flex-none">
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                                    <input
+                                        type="search"
+                                        value={studentSearch}
+                                        onChange={(event) => setStudentSearch(event.target.value)}
+                                        placeholder="Search students..."
+                                        aria-label="Search enrolled students"
+                                        className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm text-navy placeholder:text-gray-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy"
+                                    />
+                                </label>
+                                <span className="hidden whitespace-nowrap text-xs text-gray-400 sm:inline">
+                                    {filteredStudents.length} of {classDetails.users?.length || 0} students
+                                </span>
+                            </div>
                         </div>
 
-                        {classDetails.users && classDetails.users.length > 0 ? (
-                            <table className="min-w-full">
+                        {classDetails.users && classDetails.users.length > 0 ? filteredStudents.length > 0 ? (
+                            <>
+                            <div className="divide-y divide-gray-100 lg:hidden">
+                                {filteredStudents.map((student) => (
+                                    <div key={student.id} className="p-4 sm:p-5">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="flex min-w-0 items-center gap-3">
+                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy text-sm font-bold text-white">
+                                                    {student.first_name?.charAt(0)?.toUpperCase()}
+                                                </div>
+                                                <p className="min-w-0 text-sm font-semibold text-gray-900 break-words">
+                                                    {student.first_name} {student.last_name}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setStudentToRemove(student)}
+                                                className="shrink-0 rounded-lg bg-red-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-red-600 transition-colors hover:bg-red-500 hover:text-white"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                        <div className="mt-3 grid grid-cols-1 gap-2 pl-[52px] sm:grid-cols-2 sm:gap-4">
+                                            <div className="min-w-0">
+                                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Email</p>
+                                                <p className="mt-0.5 break-all text-sm text-gray-600">{student.email || '-'}</p>
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">WhatsApp</p>
+                                                <p className="mt-0.5 break-words text-sm text-gray-600">{student.whatsapp || '-'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="hidden overflow-x-auto lg:block">
+                            <table className="min-w-[760px] w-full">
                                 <thead>
                                     <tr className="bg-gray-50">
                                         <th className="py-3 px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Student</th>
@@ -583,7 +637,7 @@ export default function AdminClassDetails() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {classDetails.users.map((student) => (
+                                    {filteredStudents.map((student) => (
                                         <tr key={student.id} className="hover:bg-gray-50 transition-colors">
                                             <td className="py-3 px-6">
                                                 <div className="flex items-center gap-3">
@@ -609,6 +663,12 @@ export default function AdminClassDetails() {
                                     ))}
                                 </tbody>
                             </table>
+                            </div>
+                            </>
+                        ) : (
+                            <div className="px-4 py-10 text-center text-sm text-gray-400">
+                                No enrolled students match: {studentSearch}
+                            </div>
                         ) : (
                             <div className="text-center py-12 text-gray-400">
                                 <Users className="w-10 h-10 mx-auto mb-3 text-gray-300" />
