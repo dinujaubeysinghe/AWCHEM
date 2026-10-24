@@ -15,7 +15,10 @@ export default function Sidebar() {
        const [showLogoutModal, setShowLogoutModal] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-    const isActive = (path) => pathname === path;
+    const isActive = (path) => pathname === path || (
+        (path === '/admin/classes' && pathname.startsWith('/admin/classes/')) ||
+        (path === '/student/classes' && pathname.startsWith('/student/classes/'))
+    );
 
     useEffect(() => {
         axiosClient.get('/user')
@@ -63,7 +66,7 @@ export default function Sidebar() {
             <button
                 type="button"
                 onClick={() => setMobileMenuOpen((open) => !open)}
-                className="fixed left-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-navy text-white shadow-md md:hidden"
+                className={`fixed ${mobileMenuOpen ? 'left-[15rem]' : 'left-4'} top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-navy text-white shadow-md transition-[left] md:hidden`}
                 aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={mobileMenuOpen}
             >

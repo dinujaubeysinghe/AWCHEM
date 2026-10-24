@@ -70,18 +70,32 @@ export default function Signup() {
     };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-slate-50 lg:flex-row lg:bg-white">
+      <div className="absolute inset-x-0 top-0 h-72 overflow-hidden rounded-b-[3rem] bg-navy lg:hidden">
+        <div className="absolute -right-12 -top-16 h-56 w-56 rounded-full border-[28px] border-white/5" />
+        <div className="absolute -left-10 top-32 h-32 w-32 rounded-full bg-yelo/10" />
+        <div className="absolute right-12 bottom-4 h-20 w-20 rounded-full bg-yelo/10" />
+      </div>
       {/* Illustration: hidden on mobile/tablet, visible from lg breakpoint up */}
       <div className="hidden lg:flex lg:w-1/2 min-h-screen bg-white items-center justify-start">
         <img src={register} alt="Register Illustration" className="w-3/4 h-screen rounded-r-4xl object-cover" />
       </div>
 
-      <div className="w-full lg:w-1/2 min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:px-6">
-        <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy mb-6 mt-2 sm:mb-8 sm:mt-6 text-center">
+      <div className="relative z-10 w-full lg:w-1/2 min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:px-6">
+        <div className="w-full max-w-md sm:max-w-lg lg:w-3/4">
+        <div className="lg:hidden mb-6 px-2 text-white">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-yelo">
+            <span className="h-2 w-2 rounded-full bg-yelo" />
+            AWCHEM <span className="text-white/60">|</span> SMART CHEMISTRY
+          </div>
+          <h1 className="mt-5 text-3xl font-bold tracking-tight">Create your account</h1>
+          <p className="mt-1 text-sm text-white/70">Join your class and keep your learning in one place.</p>
+        </div>
+        <div className="hidden lg:block text-3xl sm:text-4xl lg:text-5xl font-bold text-navy mb-6 mt-2 sm:mb-8 sm:mt-6 text-center">
           REGISTER
         </div>
         <form
-        className="flex flex-col w-full max-w-md sm:max-w-lg lg:w-3/4 bg-[#f9f9f9] p-5 sm:p-8 rounded-2xl shadow-md"
+        className="flex flex-col w-full bg-white lg:bg-[#f9f9f9] border border-gray-100 lg:border-transparent p-5 sm:p-8 rounded-2xl shadow-xl lg:shadow-md"
         onSubmit={handleSubmit}>
 
             {error && (
@@ -106,94 +120,97 @@ export default function Signup() {
           <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">First Name</label>
+                <label className="text-sm sm:text-base font-medium text-navy">First Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="First Name"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={firstNameRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Last Name</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Last Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="Last Name"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={lastNameRef}/>
             </div>
           </div>
 
           <div className="flex ml-1">
-            <label className="text-base sm:text-lg text-navy">Email</label>
+            <label className="text-sm sm:text-base font-medium text-navy">Email</label>
             <span className="text-red-500 ml-1">*</span>
           </div>
           <input
-          type="text"
+          type="email"
           placeholder="Email"
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+          autoComplete="email"
+          className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
           ref={emailRef}/>
 
           <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Password</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Password</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="password"
               placeholder="Password"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              autoComplete="new-password"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={passwordRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Confirm Password</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Confirm Password</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="password"
               placeholder="Confirm Password"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              autoComplete="new-password"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={confirmPasswordRef}/>
             </div>
           </div>
 
           <div className="flex ml-1">
-            <label className="text-base sm:text-lg text-navy">Address</label>
+            <label className="text-sm sm:text-base font-medium text-navy">Address</label>
             <span className="text-red-500 ml-1">*</span>
           </div>
           <input
           type="text"
           placeholder="Address"
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+          className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
           ref={addressRef}/>
 
           <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Whatsapp</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Whatsapp</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="Whatsapp"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={whatsappRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">NIC</label>
+                <label className="text-sm sm:text-base font-medium text-navy">NIC</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="NIC"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={nicRef}/>
             </div>
           </div>
@@ -201,22 +218,22 @@ export default function Signup() {
           <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">School</label>
+                <label className="text-sm sm:text-base font-medium text-navy">School</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="School"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={schoolRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">School District</label>
+                <label className="text-sm sm:text-base font-medium text-navy">School District</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <select
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full bg-white"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={schoolDistrictRef}
               defaultValue="">
                 <option value="" disabled>Select District</option>
@@ -230,33 +247,33 @@ export default function Signup() {
           <div className="flex flex-col sm:flex-row gap-0 sm:gap-4">
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Guardian Name</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Guardian Name</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="Guardian Name"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={guardianNameRef}/>
             </div>
             <div className="flex flex-col flex-1">
               <div className="flex ml-1">
-                <label className="text-base sm:text-lg text-navy">Guardian Phone</label>
+                <label className="text-sm sm:text-base font-medium text-navy">Guardian Phone</label>
                 <span className="text-red-500 ml-1">*</span>
               </div>
               <input
               type="text"
               placeholder="Guardian Phone"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6 w-full"
+              className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6 w-full"
               ref={guardianPhoneRef}/>
             </div>
           </div>
 
           <button
           type="submit"
-          className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 w-full cursor-pointer"
+          className="bg-yelo text-white font-semibold px-4 py-3 rounded-xl shadow-sm hover:bg-amber-500 hover:shadow-md transition duration-300 w-full cursor-pointer"
           >
-            Register
+            Create account
             </button>
 
           <div className="mt-4 text-center">
@@ -264,6 +281,7 @@ export default function Signup() {
             <a href="/login" className="text-blue-500 hover:underline">LogIn</a>
           </div>
         </form>
+        </div>
       </div>
     </div>
   )

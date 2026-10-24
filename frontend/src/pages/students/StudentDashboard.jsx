@@ -165,7 +165,7 @@ export default function StudentDashboard() {
 
           {/* My Results */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-yelo" />
                 <h2 className="text-sm font-bold text-navy">My Results</h2>
@@ -180,7 +180,23 @@ export default function StudentDashboard() {
             </div>
 
             {myResults.length > 0 ? (
-              <table className="min-w-full">
+              <>
+              <div className="divide-y divide-gray-100 sm:hidden">
+                {myResults.slice(0, 5).map((result) => (
+                  <div key={result.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 px-4 py-3">
+                    <p className="min-w-0 text-sm font-semibold text-navy break-words">{result.quiz_title}</p>
+                    <span className={`row-span-2 self-center px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${result.marks >= 75 ? 'bg-green-100 text-green-700' :
+                      result.marks >= 50 ? 'bg-yellow-100 text-yellow-600' :
+                        'bg-red-100 text-red-600'
+                      }`}>
+                      {result.marks}%
+                    </span>
+                    <p className="min-w-0 text-xs text-gray-500 break-words">{result.class_name}</p>
+                    <p className="text-xs text-gray-500">{result.quiz_date}</p>
+                  </div>
+                ))}
+              </div>
+              <table className="hidden sm:table min-w-full">
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="py-3 px-6 text-left text-xs font-semibold text-navy uppercase tracking-wider">Quiz</th>
@@ -207,6 +223,7 @@ export default function StudentDashboard() {
                   ))}
                 </tbody>
               </table>
+              </>
             ) : (
               <div className="text-center py-10 text-gray-400">
                 <TrendingUp className="w-8 h-8 mx-auto mb-2 text-gray-300" />

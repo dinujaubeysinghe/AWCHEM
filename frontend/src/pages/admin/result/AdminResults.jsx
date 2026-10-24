@@ -8,6 +8,7 @@ export default function AdminResults() {
     const { setNotifications } = useAuth()
     const [classes, setClasses] = useState([])
     const [selectedClass, setSelectedClass] = useState('')
+    const [selectedQuiz, setSelectedQuiz] = useState('')
     const [classQuizzes, setClassQuizzes] = useState([])
     const [enrolledStudents, setEnrolledStudents] = useState([])
     const [results, setResults] = useState([])
@@ -17,7 +18,7 @@ export default function AdminResults() {
     const [editMarks, setEditMarks] = useState('')
 
     const [records, setRecords] = useState([
-        { user_id: '', class_quiz_id: '', marks: '' }
+        { user_id: '', marks: '' }
     ])
 
     useEffect(() => {
@@ -84,7 +85,11 @@ export default function AdminResults() {
     }
 
     const addRecord = () => {
-        setRecords([...records, { user_id: '', class_quiz_id: '', marks: '' }])
+        if (!selectedQuiz) {
+            setNotifications('Please select a quiz before adding a record.')
+            return
+        }
+        setRecords([...records, { user_id: '', marks: '' }])
     }
 
     const removeRecord = (index) => {
@@ -96,8 +101,8 @@ export default function AdminResults() {
         const errors = []
 
         for (const record of records) {
-            if (!record.user_id || !record.class_quiz_id || record.marks === '') {
-                errors.push('Please fill all fields in every record.')
+            if (!record.user_id || !selectedQuiz || record.marks === '') {
+                errors.push('Please select a quiz and fill all fields in every record.')
                 break
             }
         }
@@ -112,12 +117,12 @@ export default function AdminResults() {
             for (const record of records) {
                 await axiosClient.post('/results', {
                     user_id: record.user_id,
-                    class_quiz_id: record.class_quiz_id,
+                    class_quiz_id: selectedQuiz,
                     marks: record.marks,
                 })
             }
             setNotifications('Results saved successfully.')
-            setRecords([{ user_id: '', class_quiz_id: '', marks: '' }])
+            setRecords([{ user_id: '', marks: '' }])
             getResults()
         } catch (err) {
             setNotifications(err.response?.data?.message || 'Error occurred while saving results.')
@@ -169,7 +174,10 @@ export default function AdminResults() {
                 </label>
                 <select
                     value={selectedClass}
-                    onChange={(e) => setSelectedClass(e.target.value)}
+                    onChange={(e) => {
+                        setSelectedClass(e.target.value)
+                        setSelectedQuiz('')
+                    }}
                     className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy w-full sm:max-w-sm"
                 >
                     <option value="">Select a class...</option>
@@ -188,13 +196,30 @@ export default function AdminResults() {
                                 <TrendingUp className="w-4 h-4 text-yelo" />
                                 Add Results
                             </h2>
-                            <button
-                                onClick={addRecord}
-                                className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors self-start sm:self-auto"
-                            >
-                                <Plus className="w-3.5 h-3.5" />
-                                Add Record
-                            </button>
+                            <div className="flex items-center gap-2 w-full sm:w-auto">
+                                <select
+                                    value={selectedQuiz}
+                                    onChange={(e) => setSelectedQuiz(e.target.value)}
+                                    aria-label="Select quiz for all records"
+                                    className="min-w-0 flex-1 sm:w-56 sm:flex-none px-3 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                >
+                                    <option value="">Select Quiz</option>
+                                    {[...classQuizzes]
+                                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                        .map((quiz) => (
+                                        <option key={quiz.id} value={quiz.id}>
+                                            {quiz.title} — {quiz.date}
+                                        </option>
+                                        ))}
+                                </select>
+                                <button
+                                    onClick={addRecord}
+                                    className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors shrink-0"
+                                >
+                                    <Plus className="w-3.5 h-3.5" />
+                                    Add Record
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-3">
@@ -207,20 +232,6 @@ export default function AdminResults() {
                                         value={record.user_id}
                                         onChange={(id) => handleRecordChange(index, 'user_id', id)}
                                     />
-
-                                    {/* Quiz */}
-                                    <select
-                                        value={record.class_quiz_id}
-                                        onChange={(e) => handleRecordChange(index, 'class_quiz_id', e.target.value)}
-                                        className="w-full sm:flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
-                                    >
-                                        <option value="">Select Quiz</option>
-                                        {classQuizzes.map((quiz) => (
-                                            <option key={quiz.id} value={quiz.id}>
-                                                {quiz.title} — {quiz.date}
-                                            </option>
-                                        ))}
-                                    </select>
 
                                     <div className="flex items-center gap-3 w-full sm:w-auto">
                                         {/* Marks */}

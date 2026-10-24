@@ -353,7 +353,7 @@ export default function AdminClassDetails() {
     }
 
     return (
-        <div className="p-6">
+        <div className="min-w-0 p-4 sm:p-6">
 
             {/* Back Button */}
             <button
@@ -365,10 +365,18 @@ export default function AdminClassDetails() {
             </button>
 
             {/* Page Header */}
-            <div className="flex items-center justify-between mb-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-navy">{classDetails.name}</h1>
-                    <p className="text-sm text-gray-500 mt-1">Class Details & Enrolled Students</p>
+            <div className="relative isolate overflow-hidden rounded-2xl bg-navy px-5 py-6 sm:px-7 sm:py-8 mb-6 shadow-sm">
+                <div className="absolute -right-10 -top-14 h-44 w-44 rounded-full border-[24px] border-white/5" />
+                <div className="absolute right-16 -bottom-20 h-36 w-36 rounded-full bg-yelo/10" />
+                <div className="relative flex items-center gap-4">
+                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white/10 text-yelo ring-1 ring-white/15 shrink-0">
+                        <BookOpen className="h-7 w-7 sm:h-8 sm:w-8" />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-yelo">Class Details</p>
+                        <h1 className="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold leading-tight text-white break-words">{classDetails.name}</h1>
+                        <p className="mt-2 text-sm text-white/70">Class information, enrolled students, and progress</p>
+                    </div>
                 </div>
             </div>
 
@@ -613,7 +621,7 @@ export default function AdminClassDetails() {
 
             {activeTab === 'progress' && (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div className="flex items-center gap-2">
                             <ClipboardCheck className="w-5 h-5 text-yelo" />
                             <h2 className="text-sm font-bold text-navy">Weekly Progress</h2>
@@ -638,7 +646,7 @@ export default function AdminClassDetails() {
                             <p className="text-sm">No weeks added yet. Click "Add Week" to start posting progress.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-4 p-6">
+                        <div className="flex flex-col gap-4 p-3 sm:p-6">
                             {weeks.map((week) => {
                                 const isOpen = expandedWeeks[week.id]
                                 return (
@@ -646,38 +654,37 @@ export default function AdminClassDetails() {
                                         key={week.id}
                                         className="border border-gray-200 rounded-xl overflow-hidden"
                                     >
-                                        <div
-                                            className="flex items-center justify-between px-5 py-4 cursor-pointer bg-gray-100 transition-colors"
-                                            onClick={() => toggleWeek(week.id)}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                {isOpen ? (
-                                                    <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-                                                ) : (
-                                                    <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
-                                                )}
-                                                <div>
-                                                    <div className="flex items-center gap-2">
-                                                        {week.lecture_name && (
-                                                            <span className="text-lg text-navy font-extrabold">{week.lecture_name}</span>
-                                                        )}
-                                                    </div>
-                                                    <p className="text-md text-gray-700 mt-0.5">
-                                                        {week.start_date}
-                                                    </p>
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-amber-50 px-3 sm:px-5 py-4 transition-colors hover:bg-amber-100">
+                                            <button
+                                                type="button"
+                                                className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                                                onClick={() => toggleWeek(week.id)}
+                                                aria-expanded={isOpen}
+                                            >
+                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-yelo shadow-sm ring-1 ring-amber-200">
+                                                    <CalendarDays className="h-4 w-4" />
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                                                <span className="min-w-0 flex-1">
+                                                    {week.lecture_name && (
+                                                        <span className="block text-base sm:text-lg text-navy font-extrabold leading-snug break-words">{week.lecture_name}</span>
+                                                    )}
+                                                    <span className="block text-xs sm:text-sm text-gray-600 mt-1">{week.start_date}</span>
+                                                </span>
+                                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-navy shadow-sm ring-1 ring-amber-200">
+                                                    {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                                </span>
+                                            </button>
+                                            <div className="flex items-center gap-2 pl-13 sm:pl-0">
                                                 <button
                                                     onClick={() => openEditLectureName(week)}
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-gray-100 hover:bg-navy hover:text-white rounded-lg transition-colors"
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-navy bg-white/80 hover:bg-navy hover:text-white rounded-lg transition-colors"
                                                 >
                                                     <Pencil className="w-3.5 h-3.5" />
                                                     Lecture
                                                 </button>
                                                 <button
                                                     onClick={() => openAddResource(week)}
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors"
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-yelo bg-white/80 border border-yelo/60 hover:bg-yelo hover:text-white rounded-lg transition-colors"
                                                 >
                                                     <Plus className="w-3.5 h-3.5" />
                                                     Resource

@@ -65,7 +65,7 @@ export default function StudentClassProgress() {
     }
 
     return (
-        <div className="p-6">
+        <div className="min-w-0 p-4 sm:p-6">
 
             {/* Back Button */}
             <button
@@ -77,21 +77,26 @@ export default function StudentClassProgress() {
             </button>
 
             {/* Page Header */}
-            <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-navy text-white flex items-center justify-center shrink-0">
-                    <ClipboardCheck className="w-5 h-5" />
-                </div>
-                <div>
-                    <h1 className="text-2xl font-bold text-navy">
-                        {classDetails ? classDetails.name : 'Class Progress'}
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-1">Weekly Progress & Resources</p>
+            <div className="relative isolate overflow-hidden rounded-2xl bg-navy px-5 py-6 sm:px-7 sm:py-8 mb-6 shadow-sm">
+                <div className="absolute -right-10 -top-14 h-44 w-44 rounded-full border-[24px] border-white/5" />
+                <div className="absolute right-16 -bottom-20 h-36 w-36 rounded-full bg-yelo/10" />
+                <div className="relative flex items-center gap-4">
+                    <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white/10 text-yelo ring-1 ring-white/15 shrink-0">
+                        <ClipboardCheck className="h-7 w-7 sm:h-8 sm:w-8" />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-yelo">Class Progress</p>
+                        <h1 className="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold leading-tight text-white break-words">
+                            {classDetails ? classDetails.name : 'Your class'}
+                        </h1>
+                        <p className="mt-2 text-sm text-white/70">Weekly lessons and learning resources</p>
+                    </div>
                 </div>
             </div>
 
             {/* Weekly Progress */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100">
+                <div className="flex items-center gap-2 px-4 sm:px-6 py-4 border-b border-gray-100">
                     <ClipboardCheck className="w-5 h-5 text-yelo" />
                     <h2 className="text-sm font-bold text-navy">Progress</h2>
                 </div>
@@ -106,7 +111,7 @@ export default function StudentClassProgress() {
                         <p className="text-sm">No progress has been posted for this class yet.</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-4 p-6">
+                    <div className="flex flex-col gap-3 sm:gap-4 p-3 sm:p-6">
                         {weeks.map((week) => {
                             const isOpen = expandedWeeks[week.id]
                             return (
@@ -114,37 +119,35 @@ export default function StudentClassProgress() {
                                     key={week.id}
                                     className="border border-gray-200 rounded-xl overflow-hidden"
                                 >
-                                    <div
-                                        className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                                    <button
+                                        type="button"
+                                        className="flex w-full items-center justify-between gap-3 bg-amber-50 px-3 sm:px-5 py-4 text-left transition-colors hover:bg-amber-100"
                                         onClick={() => toggleWeek(week.id)}
+                                        aria-expanded={isOpen}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            {isOpen ? (
-                                                <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-                                            ) : (
-                                                <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
-                                            )}
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    {week.lecture_name && (
-                                                        <span className="text-lg text-navy font-bold">{week.lecture_name}</span>
-                                                    )}
-                                                </div>
-                                                <div className="flex items-center gap-1.5 text-md text-gray-700 mt-0.5">
-                                                    <CalendarDays className="w-3.5 h-3.5" />
+                                        <div className="flex min-w-0 items-center gap-3">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-yelo shadow-sm ring-1 ring-gray-200">
+                                                <CalendarDays className="h-4 w-4" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                {week.lecture_name && (
+                                                    <span className="mt-0.5 block text-base sm:text-lg text-navy font-bold leading-snug break-words">{week.lecture_name}</span>
+                                                )}
+                                                <div className="flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 mt-1">
+                                                    <span className="font-medium">Date</span>
                                                     {week.start_date}
                                                 </div>
                                             </div>
                                         </div>
-                                        <span className="text-xs text-gray-400 shrink-0">
-                                            {week.resources?.length || 0} resource{week.resources?.length !== 1 ? 's' : ''}
+                                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-navy shadow-sm ring-1 ring-gray-200">
+                                            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                                         </span>
-                                    </div>
+                                    </button>
 
                                     {isOpen && (
-                                        <div className="px-5 pb-4 border-t border-gray-100 pt-4">
+                                        <div className="px-3 sm:px-5 pb-4 border-t border-gray-100 pt-3 sm:pt-4">
                                             {week.resources && week.resources.length > 0 ? (
-                                                <div className="flex flex-col gap-2 pl-7">
+                                                <div className="flex flex-col gap-2 sm:pl-7">
                                                     {week.resources.map((resource) => (
                                                         <a
                                                             key={resource.id}

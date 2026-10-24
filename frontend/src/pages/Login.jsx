@@ -67,15 +67,28 @@ export default function Login() {
     }
 
     return (
-        <div className="flex min-h-screen">
+        <div className="relative flex min-h-screen overflow-hidden bg-slate-50 md:bg-white">
+            <div className="absolute inset-x-0 top-0 h-[44vh] overflow-hidden rounded-b-[3rem] bg-navy md:hidden">
+                <div className="absolute -right-12 -top-16 h-56 w-56 rounded-full border-[28px] border-white/5" />
+                <div className="absolute -left-10 top-32 h-32 w-32 rounded-full bg-yelo/10" />
+                <div className="absolute right-12 bottom-4 h-20 w-20 rounded-full bg-yelo/10" />
+            </div>
 
             {/* Left side — form */}
-            <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6 sm:px-12 py-12">
+            <div className="relative z-10 w-full md:w-1/2 flex flex-col items-center justify-center px-5 sm:px-12 py-10 md:py-12">
                 <div className="w-full max-w-md">
-                    <div className="text-4xl sm:text-5xl font-bold text-navy mb-8 text-center">LOGIN</div>
+                    <div className="md:hidden mb-7 px-2 text-white">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-yelo">
+                            <span className="h-2 w-2 rounded-full bg-yelo" />
+                            AWCHEM <span className="text-white/60">|</span> SMART CHEMISTRY
+                        </div>
+                        <h1 className="mt-5 text-3xl font-bold tracking-tight">Welcome back</h1>
+                        <p className="mt-1 text-sm text-white/70">Sign in to continue to your learning space.</p>
+                    </div>
+                    <div className="hidden md:block text-4xl sm:text-5xl font-bold text-navy mb-8 text-center">LOGIN</div>
 
                     <form
-                        className="flex flex-col bg-[#f9f9f9] p-6 sm:p-8 rounded-2xl shadow-md"
+                        className="flex flex-col bg-white md:bg-[#f9f9f9] border border-gray-100 md:border-transparent p-5 sm:p-8 rounded-2xl shadow-xl md:shadow-md"
                         onSubmit={handleSubmit}>
 
                         {/* Email verified success */}
@@ -127,25 +140,27 @@ export default function Login() {
 
                         {/* Email field */}
                         <div className="flex ml-1 mb-1">
-                            <label className="text-lg text-navy">Email</label>
+                            <label className="text-sm sm:text-base font-medium text-navy">Email</label>
                             <span className="text-red-500 ml-1">*</span>
                         </div>
                         <input
-                            type="text"
+                            type="email"
                             placeholder="Email"
-                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy mb-6"
+                            autoComplete="email"
+                            className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo mb-6"
                             ref={emailRef} />
 
                         {/* Password field */}
                         <div className="flex flex-col  ml-1">
                         <div className="flex ml-1">
-                            <label className="text-lg text-navy">Password</label>
+                            <label className="text-sm sm:text-base font-medium text-navy">Password</label>
                             <span className="text-red-500 ml-1">*</span>
                         </div>
                         <input
                             type="password"
                             placeholder="Password"
-                            className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-navy"
+                            autoComplete="current-password"
+                            className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yelo/60 focus:border-yelo"
                             ref={passwordRef} />
 
                          {/* Forgot password */}
@@ -159,8 +174,8 @@ export default function Login() {
                         {/* Submit button */}
                         <button
                             type="submit"
-                            className="bg-yelo text-white px-4 py-2 rounded-xl hover:bg-amber-500 transition duration-300 cursor-pointer">
-                            Login
+                            className="bg-yelo text-white font-semibold px-4 py-3 rounded-xl shadow-sm hover:bg-amber-500 hover:shadow-md transition duration-300 cursor-pointer">
+                            Sign in
                         </button>
 
                         {/* Sign up link */}
