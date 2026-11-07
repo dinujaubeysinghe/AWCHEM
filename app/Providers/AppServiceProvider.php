@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
         // Without this, Laravel tries to resolve the named route "password.reset"
         // which does not exist in this API-only setup, causing a 500 error.
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');
+            // Get the frontend URL from the config.
+            $frontendUrl = config('app.frontend_url');;
             return "{$frontendUrl}/reset-password?token={$token}&email=" . urlencode($user->email);
         });
     }

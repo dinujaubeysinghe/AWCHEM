@@ -86,7 +86,7 @@ export default function Signup() {
         <div className="lg:hidden mb-6 px-2 text-white">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-yelo">
             <span className="h-2 w-2 rounded-full bg-yelo" />
-            AWCHEM <span className="text-white/60">|</span> SMART CHEMISTRY
+            AWCHEMISTRY <span className="text-white/60">|</span> SMART CHEMISTRY
           </div>
           <h1 className="mt-5 text-3xl font-bold tracking-tight">Create your account</h1>
           <p className="mt-1 text-sm text-white/70">Join your class and keep your learning in one place.</p>
