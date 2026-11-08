@@ -17,9 +17,10 @@ class NoticeResource extends JsonResource
     {
       return[
             'id' => $this->id,
+            'student_class_id' => $this->student_class_id,
             'title' => $this->title,
             'content' => $this->content,
-            
+            'created_at' => $this->created_at,
       ];
     }
 }

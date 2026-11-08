@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\StudentEnrollment;
 use App\Models\User;
+use App\Models\Notice;
 
 #[Fillable(['name', 'batch', 'location', 'day', 'start_time', 'end_time', 'ong_unit', 'start_date'])]
 class StudentClasses extends Model
@@ -19,6 +20,11 @@ class StudentClasses extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'student_enrollments', 'student_class_id', 'user_id');
+    }
+
+    public function notices()
+    {
+        return $this->hasMany(Notice::class, 'student_class_id');
     }
 
     

@@ -50,11 +50,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/classes/{classId}/quizzes', [ClassQuizController::class, 'index']);
     Route::get('/classes/{classId}/weeks', [ClassWeekController::class, 'index']);
+    Route::get('/classes/{classId}/notices', [NoticeController::class, 'classIndex']);
+
+    Route::get('/classes/{classId}/notices', [NoticeController::class, 'classIndex']);
 
     // ---------- Admin only ----------
     Route::middleware('admin')->group(function () {
         Route::apiResource('users', UserController::class);
         Route::apiResource('notices', NoticeController::class)->except(['index', 'show']);
+        Route::post('/classes/{classId}/notices', [NoticeController::class, 'classStore']);
+        Route::put('/classes/{classId}/notices/{noticeId}', [NoticeController::class, 'classUpdate']);
+        Route::delete('/classes/{classId}/notices/{noticeId}', [NoticeController::class, 'classDestroy']);
         Route::apiResource('classes', StudentClassesController::class)->except(['index', 'show']);
         Route::apiResource('quizzes', QuizController::class)->except(['index', 'show']);
         Route::delete('/classes/{classId}/users/{userId}', [StudentClassesController::class, 'removeStudent']);
@@ -62,6 +68,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/classes/{classId}/quizzes', [ClassQuizController::class, 'store']);
         Route::put('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'update']);
         Route::delete('/classes/{classId}/quizzes/{quizId}', [ClassQuizController::class, 'destroy']);
+
+        Route::post('/classes/{classId}/notices', [NoticeController::class, 'classStore']);
+        Route::put('/classes/{classId}/notices/{noticeId}', [NoticeController::class, 'classUpdate']);
+        Route::delete('/classes/{classId}/notices/{noticeId}', [NoticeController::class, 'classDestroy']);
 
         Route::get('/results', [ResultController::class, 'index']);
         Route::post('/results', [ResultController::class, 'store']);

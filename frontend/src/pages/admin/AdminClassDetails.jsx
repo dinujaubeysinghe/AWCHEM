@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import axiosClient from '../axiosClient'
 import {
     BookOpen, MapPin, Clock, CalendarDays, Users, ArrowLeft, Clock3, Pencil, Plus, ClipboardList,
-    Globe, Trash2, ClipboardCheck, Link2, FileText, ChevronDown, ChevronUp, X, Search
+    Globe, Trash2, ClipboardCheck, Link2, FileText, ChevronDown, ChevronUp, X, Search, Bell
 } from 'lucide-react'
 
 export default function AdminClassDetails() {
@@ -16,6 +16,11 @@ export default function AdminClassDetails() {
     const [studentToRemove, setStudentToRemove] = useState(null)
     const [studentSearch, setStudentSearch] = useState('')
     const [loading, setLoading] = useState(false)
+    const [notices, setNotices] = useState([])
+    const [showNoticeForm, setShowNoticeForm] = useState(false)
+    const [noticeToEdit, setNoticeToEdit] = useState(null)
+    const [noticeForm, setNoticeForm] = useState({ title: '', content: '' })
+    const [noticeLoading, setNoticeLoading] = useState(false)
 
     const [activeTab, setActiveTab] = useState('details') // 'details' | 'progress'
 
@@ -58,6 +63,7 @@ export default function AdminClassDetails() {
         getAllQuizzes();
         getClassQuizzes();
         getClassWeeks();
+        getClassNotices();
     }, [])
 
     const getClassDetails = () => {
@@ -71,6 +77,57 @@ export default function AdminClassDetails() {
                 setLoading(false)
                 setNotifications('Error occurred while fetching class details.')
                 console.error('Error occurred while fetching class details:', err)
+            })
+    }
+
+    const getClassNotices = () => {
+        axiosClient.get(`/classes/${id}/notices`)
+            .then(({ data }) => setNotices(Array.isArray(data) ? data : data.data ?? []))
+            .catch((err) => {
+                setNotifications('Error occurred while fetching class notices.')
+                console.error('Error occurred while fetching class notices:', err)
+            })
+    }
+
+    const openNoticeForm = (notice = null) => {
+        setNoticeToEdit(notice)
+        setNoticeForm(notice ? { title: notice.title, content: notice.content } : { title: '', content: '' })
+        setShowNoticeForm(true)
+    }
+
+    const saveNotice = () => {
+        setNoticeLoading(true)
+        const request = noticeToEdit
+            ? axiosClient.put(`/classes/${id}/notices/${noticeToEdit.id}`, noticeForm)
+            : axiosClient.post(`/classes/${id}/notices`, noticeForm)
+
+        request
+            .then(() => {
+                setNoticeLoading(false)
+                setShowNoticeForm(false)
+                setNoticeToEdit(null)
+                setNoticeForm({ title: '', content: '' })
+                setNotifications(noticeToEdit ? 'Class notice updated.' : 'Class notice created.')
+                getClassNotices()
+            })
+            .catch((err) => {
+                setNoticeLoading(false)
+                setNotifications(err.response?.data?.message || 'Error occurred while saving class notice.')
+                console.error('Error occurred while saving class notice:', err)
+            })
+    }
+
+    const deleteNotice = (notice) => {
+        if (!window.confirm(`Delete "${notice.title}"?`)) return
+
+        axiosClient.delete(`/classes/${id}/notices/${notice.id}`)
+            .then(() => {
+                setNotifications('Class notice deleted.')
+                getClassNotices()
+            })
+            .catch((err) => {
+                setNotifications('Error occurred while deleting class notice.')
+                console.error('Error occurred while deleting class notice:', err)
             })
     }
 
@@ -465,6 +522,46 @@ export default function AdminClassDetails() {
 
                     </div>
 
+                    {/* Class Notices */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4 border-b border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <Bell className="w-5 h-5 text-yelo" />
+                                <h2 className="text-sm font-bold text-navy">Class Notices</h2>
+                            </div>
+                            <button
+                                onClick={() => openNoticeForm()}
+                                className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors"
+                            >
+                                <Plus className="w-3.5 h-3.5" />
+                                Add Notice
+                            </button>
+                        </div>
+
+                        {notices.length > 0 ? (
+                            <div className="flex flex-col gap-3 p-4 sm:p-6">
+                                {notices.map((notice) => (
+                                    <div key={notice.id} className="bg-white border border-yelo rounded-2xl overflow-hidden">
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-yelo px-4 py-3">
+                                            <h3 className="text-lg sm:text-2xl font-bold text-white min-w-0">
+                                                {notice.title}
+                                            </h3>
+                                            <div className="flex gap-2 shrink-0">
+                                                <button onClick={() => openNoticeForm(notice)} className="px-2.5 py-1 text-xs text-navy bg-white rounded-lg">Edit</button>
+                                                <button onClick={() => deleteNotice(notice)} className="px-2.5 py-1 text-xs text-red-600 bg-white rounded-lg">Delete</button>
+                                            </div>
+                                        </div>
+                                        <p className="text-md sm:text-md text-gray-700 p-4 whitespace-pre-wrap">
+                                            {notice.content}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="px-6 py-8 text-center text-sm text-gray-400">No notices have been posted for this class.</p>
+                        )}
+                    </div>
+
                     {/* Quiz Assignments */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 px-6 py-4">
@@ -811,6 +908,67 @@ export default function AdminClassDetails() {
                 </div>
             )
             }
+
+            {/* Class Notice Modal */}
+            {showNoticeForm && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-bold text-navy">
+                                {noticeToEdit ? 'Edit Notice' : 'Add Notice'}
+                            </h2>
+                            <button
+                                onClick={() => setShowNoticeForm(false)}
+                                className="text-gray-400 hover:text-gray-600"
+                                aria-label="Close notice form"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Title <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={noticeForm.title}
+                                    onChange={(e) => setNoticeForm({ ...noticeForm, title: e.target.value })}
+                                    placeholder="e.g. Class postponed this week"
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-medium text-navy">
+                                    Content <span className="text-red-500">*</span>
+                                </label>
+                                <textarea
+                                    value={noticeForm.content}
+                                    onChange={(e) => setNoticeForm({ ...noticeForm, content: e.target.value })}
+                                    placeholder="Write the notice details here..."
+                                    rows={6}
+                                    className="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy resize-y"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-6 pt-4 border-t border-gray-100">
+                            <button
+                                onClick={() => setShowNoticeForm(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={saveNotice}
+                                disabled={noticeLoading || !noticeForm.title.trim() || !noticeForm.content.trim()}
+                                className="px-4 py-2 text-sm font-medium text-white bg-navy hover:bg-opacity-90 rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                {noticeLoading ? 'Saving...' : noticeToEdit ? 'Update' : 'Create'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Remove Student Confirmation Modal */}
             {

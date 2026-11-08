@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import axiosClient from '../axiosClient'
 import {
-    ArrowLeft, ClipboardCheck, ChevronDown, ChevronUp, FileText, Link2, CalendarDays
+    ArrowLeft, ClipboardCheck, ChevronDown, ChevronUp, FileText, Link2, CalendarDays, Bell
 } from 'lucide-react'
 
 export default function StudentClassProgress() {
@@ -16,10 +16,12 @@ export default function StudentClassProgress() {
     const [weeks, setWeeks] = useState([])
     const [loading, setLoading] = useState(false)
     const [expandedWeeks, setExpandedWeeks] = useState({})
+    const [notices, setNotices] = useState([])
 
     useEffect(() => {
         getClassDetails()
         getClassWeeks()
+        getClassNotices()
     }, [])
 
     const getClassDetails = () => {
@@ -30,6 +32,15 @@ export default function StudentClassProgress() {
             .catch((err) => {
                 setNotifications('Error occurred while fetching class details.')
                 console.error('Error occurred while fetching class details:', err)
+            })
+    }
+
+    const getClassNotices = () => {
+        axiosClient.get(`/classes/${id}/notices`)
+            .then(({ data }) => setNotices(Array.isArray(data) ? data : data.data ?? []))
+            .catch((err) => {
+                setNotifications('Error occurred while fetching class notices.')
+                console.error('Error occurred while fetching class notices:', err)
             })
     }
 
@@ -92,6 +103,33 @@ export default function StudentClassProgress() {
                         <p className="mt-2 text-sm text-white/70">Weekly lessons and learning resources</p>
                     </div>
                 </div>
+            </div>
+
+            {/* Class Notices */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                <div className="flex items-center gap-2 px-4 sm:px-6 py-4 border-b border-gray-100">
+                    <Bell className="w-5 h-5 text-yelo" />
+                    <h2 className="text-sm font-bold text-navy">Class Notices</h2>
+                    <span className="text-xs text-gray-400">({notices.length})</span>
+                </div>
+                {notices.length > 0 ? (
+                    <div className="flex flex-col gap-3 p-3 sm:p-6">
+                        {notices.map((notice) => (
+                            <div key={notice.id} className="bg-white border border-yelo rounded-2xl overflow-hidden">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-yelo px-4 py-3">
+                                    <h3 className="text-lg sm:text-2xl font-bold text-white min-w-0">
+                                        {notice.title}
+                                    </h3>
+                                </div>
+                                <p className="text-md sm:text-md text-gray-700 p-4 whitespace-pre-wrap">
+                                    {notice.content}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="px-6 py-8 text-center text-sm text-gray-400">No notices have been posted for this class.</p>
+                )}
             </div>
 
             {/* Weekly Progress */}
