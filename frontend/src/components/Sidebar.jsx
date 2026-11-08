@@ -83,22 +83,22 @@ export default function Sidebar() {
 
             <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col shadow-xl transition-transform duration-200 md:hidden ${
                 mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-            } ${user?.is_admin === true ? 'bg-navy' : 'bg-gra'}`}>
+            } bg-navy`}>
                 <div className="flex items-center gap-4 border-b border-black/10 px-6 py-5">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold text-white ${user?.is_admin === true ? 'bg-yelo' : 'bg-navy'}`}>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yelo text-xl font-bold text-white">
                         {user?.first_name?.charAt(0)?.toUpperCase()}
                     </div>
-                    <div className={`font-bold ${user?.is_admin === true ? 'text-white' : 'text-navy'}`}>
+                    <div className="font-bold text-white">
                         {user?.first_name} {user?.last_name}
                     </div>
                 </div>
                 <ul className="mt-4 px-3">
                     {(user?.is_admin === true ? adminLinks : studentLinks).map((link) => (
-                        <li key={link.name} className={`mb-1 rounded-lg px-3 py-2 ${isActive(link.path) ? (user?.is_admin === true ? 'bg-yelo/20' : 'bg-navy/10') : ''}`}>
+                        <li key={link.name} className={`mb-1 rounded-lg px-3 py-2 ${isActive(link.path) ? 'bg-yelo/20' : ''}`}>
                             <Link
                                 to={link.path}
                                 onClick={() => setMobileMenuOpen(false)}
-                                className={`flex items-center gap-3 ${user?.is_admin === true ? 'text-yelo' : 'text-navy'}`}
+                                className="flex items-center gap-3 text-yelo"
                             >
                                 {link.icon}
                                 <span>{link.name}</span>
@@ -159,14 +159,14 @@ export default function Sidebar() {
                 </div>
             )}
             {user?.is_admin === false && (
-                <div className="hidden h-screen w-16 bg-gra flex-col border-r border-r-gra/20 transition-all duration-300 md:flex md:w-56 lg:w-68">
-                    <div className="flex items-center justify-center md:justify-center gap-0 md:gap-4 px-2 md:px-8 border-b border-b-navy/20">
-                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-navy mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl  text-white pt-1.5 md:pt-2.5 shrink-0">
+                <div className="hidden h-screen w-16 bg-navy flex-col border-r border-r-gra/20 transition-all duration-300 md:flex md:w-56 lg:w-68">
+                    <div className="flex items-center justify-center md:justify-around px-2 md:px-8 border-b border-b-gra/20">
+                        <div className="w-10 h-10 md:w-15 md:h-15 rounded-full overflow-hidden bg-yelo mt-4 mb-3 md:mt-6 md:mb-4 text-center text-xl md:text-3xl font-bold text-white pt-1.5 md:pt-2.5 shrink-0">
                             {user?.first_name?.charAt(0)?.toUpperCase()}
                         </div>
-                        <div className="hidden md:flex flex-col justify-center items-center text-2xl lg:text-2xl font-bold pt-5 mb-4 text-navy">
+                        <div className="hidden md:flex flex-col justify-center items-center text-xl lg:text-3xl font-bold pt-5 mb-4 text-white">
                             {user?.first_name}
-                            <div className="text-sm font-bold text-navy">
+                            <div className="text-sm font-normal text-white">
                                 {user?.last_name}
                             </div>
                         </div>
@@ -175,8 +175,8 @@ export default function Sidebar() {
                         {studentLinks.map((link) => (
                             <li
                                 key={link.name}
-                                className={`px-2 md:px-3 py-2 text-navy cursor-pointer rounded-lg mb-1 transition-colors duration-150
-                                    ${isActive(link.path) ? 'bg-navy/10' : ''}`}
+                                className={`px-2 md:px-3 py-2 text-yelo cursor-pointer rounded-lg mb-1 transition-colors duration-150
+                                    ${isActive(link.path) ? 'bg-yelo/19' : ''}`}
                             >
                                 <Link className="flex items-center justify-center md:justify-start" to={link.path}>
                                     {link.icon}
@@ -187,10 +187,10 @@ export default function Sidebar() {
                     </ul>
                     <div className="mt-auto">
                         <ul>
-                            <li className="border-t border-t-navy/20 mt-1 mb-2">
+                            <li className="border-t border-t-gra/20 mt-1 mb-2">
                                 <button
                                     onClick={() => setShowLogoutModal(true)}
-                                    className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-500 cursor-pointer rounded-lg transition-colors duration-150"
+                                    className="flex items-center justify-center md:justify-start w-full px-2 md:px-3 py-2 text-red-400 cursor-pointer rounded-lg transition-colors duration-150"
                                 >
                                     <LogOut className="w-5 h-5" />
                                     <span className="hidden md:block ml-2">Logout</span>
