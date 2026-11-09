@@ -32,7 +32,7 @@ export default function Footer() {
                     </div>
 
                     <div className="text-white text-sm lg:text-xs">
-                        &copy; {new Date().getFullYear()} AWCHEM. All rights reserved.
+                        &copy; {new Date().getFullYear()} AWCHEMISTRY. All rights reserved.
                     </div>
                     <div className="text-white text-sm lg:text-xs">
                         Designed and Developed by{' '}
