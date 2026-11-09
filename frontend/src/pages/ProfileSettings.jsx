@@ -26,7 +26,7 @@ export default function ProfileSettings() {
     // Guard: only fetch when user is available (user starts as undefined on first render)
     useEffect(() => {
         if (!user?.id) return
-        axiosClient.get(`/users/${user.id}`)
+        axiosClient.get('/user')
             .then(({ data }) => {
                 const profile = {
                     first_name: data.first_name ?? '',
@@ -65,7 +65,7 @@ export default function ProfileSettings() {
     const handleSubmit = (e) => {
         e.preventDefault()
         setSaving(true)
-        axiosClient.put(`/users/${user.id}`, formData)
+        axiosClient.put('/user', formData)
             .then(() => {
                 setSaving(false)
                 setSavedData(formData)

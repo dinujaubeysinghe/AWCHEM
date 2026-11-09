@@ -8,6 +8,10 @@ export default function Students() {
     const [user, setUser] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(false)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [hasMore, setHasMore] = useState(false)
+    const [registeredStudentsCount, setRegisteredStudentsCount] = useState(0)
     const { setNotifications } = useAuth()
     const filteredStudents = user.filter((student) =>
         `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
@@ -15,19 +19,23 @@ export default function Students() {
     )
 
     useEffect(() => {
-        getUsers();
+        getUsers(1);
     }, [])
 
-    const getUsers = () => {
-        setLoading(true)
-        axiosClinet.get('/users')
+    const getUsers = (page = 1) => {
+        page === 1 ? setLoading(true) : setLoadingMore(true)
+        axiosClinet.get(`/users?page=${page}`)
             .then(({ data }) => {
                 setLoading(false)
-                setUser(data.data)
-                console.log('User data fetched:', data);
+                setLoadingMore(false)
+                setUser((previous) => page === 1 ? data.data : [...previous, ...data.data])
+                setCurrentPage(data.meta.current_page)
+                setHasMore(data.meta.current_page < data.meta.last_page)
+                setRegisteredStudentsCount(data.registered_students_count ?? 0)
             })
             .catch((err) => {
                 setLoading(false)
+                setLoadingMore(false)
                 setNotifications('Error occurred while fetching user data.');
                 console.error('Error occurred while fetching user data:', err);
             });
@@ -54,7 +62,7 @@ export default function Students() {
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-navy">Students</h1>
                         <p className="text-sm text-gray-500 mt-1">
-                            {filteredStudents ? `${filteredStudents.length} student${filteredStudents.length !== 1 ? 's' : ''} enrolled` : ''}
+                            {registeredStudentsCount} registered student{registeredStudentsCount !== 1 ? 's' : ''}
                         </p>
                     </div>
                     <input
@@ -119,6 +127,30 @@ export default function Students() {
                         </div>
                     )}
                 </div>
+                {(hasMore || currentPage > 1) && (
+                    <div className="flex justify-center gap-3 mt-4">
+                        {currentPage > 1 && (
+                            <button
+                                type="button"
+                                onClick={() => getUsers(1)}
+                                disabled={loading || loadingMore}
+                                className="px-4 py-2 text-sm font-medium text-navy bg-gray-100 border border-gray-200 hover:bg-navy hover:text-white rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                View less
+                            </button>
+                        )}
+                        {hasMore && (
+                        <button
+                            type="button"
+                            onClick={() => getUsers(currentPage + 1)}
+                            disabled={loadingMore}
+                            className="px-4 py-2 text-sm font-medium text-yelo bg-yelo/10 border border-yelo hover:bg-yelo hover:text-white rounded-lg transition-colors disabled:opacity-50"
+                        >
+                            {loadingMore ? 'Loading...' : 'View more'}
+                        </button>
+                        )}
+                    </div>
+                )}
                 {deletedStudent && (
                     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">

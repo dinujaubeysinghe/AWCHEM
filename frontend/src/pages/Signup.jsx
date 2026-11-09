@@ -3,12 +3,10 @@ import register from '../assets/signup.webp'
 import { useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
 import axiosClient from './axiosClient'
-import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 
 export default function Signup() {
 
-    const {setUser, setToken} = useAuth();
     const [error, setError] = useState(null);
 
     const firstNameRef = useRef();
@@ -53,9 +51,7 @@ export default function Signup() {
         console.log(payload);
         axiosClient.post('/signup', payload)
             .then(({data}) => {
-                setUser(data.user);
-                setToken(data.token);
-                navigate('/login');
+                navigate(`/email-verification?email=${encodeURIComponent(payload.email)}`);
             })
             .catch((err) => {
                 console.error('Error occurred while registering:', err);

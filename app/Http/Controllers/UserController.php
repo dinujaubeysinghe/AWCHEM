@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -17,13 +18,20 @@ class UserController extends Controller
      */
     public function index()
 {
-    return UserResource::collection(
-        User::query()
+        $registeredStudentsCount = User::query()
             ->where('is_admin', false)
-            ->orderBy('id', 'desc')
-            ->paginate(10)
-    );
-}
+            ->count();
+
+        return UserResource::collection(
+            User::query()
+                ->where('is_admin', false)
+                ->whereNotNull('email_verified_at')
+                ->orderBy('id', 'desc')
+                ->paginate(10)
+        )->additional([
+            'registered_students_count' => $registeredStudentsCount,
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -64,6 +72,33 @@ class UserController extends Controller
             $data['password'] = bcrypt($data['password']);
         }
         $user->update($data);
+        return new UserResource($user);
+    }
+
+    public function updateCurrent(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'first_name' => 'required|string|max:55',
+            'last_name' => 'required|string|max:55',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|confirmed|min:8',
+            'address' => 'required|string|max:255',
+            'whatsapp' => 'required|string|max:20',
+            'nic' => 'required|string|max:20|unique:users,nic,' . $user->id,
+            'guardian_name' => 'required|string|max:55',
+            'guardian_phone' => 'required|string|max:20',
+        ]);
+
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $user->update($data);
+
         return new UserResource($user);
     }
 

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import Signup from './pages/Signup'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import EmailVerification from './EmailVerification'
 import ProfileSettings from './pages/ProfileSettings'
 
 // Layouts
@@ -46,6 +47,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/email-verification" element={<EmailVerification />} />
 
         {/* Admin routes — Sidebar rendered once in AdminLayout */}
         <Route path='/admin' element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>

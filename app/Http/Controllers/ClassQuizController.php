@@ -15,6 +15,7 @@ class ClassQuizController extends Controller
     {
         $classQuizzes = ClassQuiz::with('quiz')
             ->where('class_id', $classId)
+            ->orderByDesc('quiz_id')
             ->get();
 
         return ClassQuizResource::collection($classQuizzes);
