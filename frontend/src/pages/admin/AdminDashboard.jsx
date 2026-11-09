@@ -57,7 +57,7 @@ export default function AdminDashboard() {
                 const results = resultsRes.data.data ?? resultsRes.data ?? []
 
                 setStats({
-                    totalStudents: users.length,
+                    totalStudents: usersRes.data.registered_students_count ?? usersRes.data.meta?.total ?? users.length,
                     totalClasses: classes.length,
                     totalQuizzes: quizzes.length,
                 })
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
 
     const statCards = [
         {
-            label: 'Total Students',
+            label: 'Verified Students',
             value: stats.totalStudents,
             icon: <Users className="w-6 h-6" />,
             bg: 'bg-navy',

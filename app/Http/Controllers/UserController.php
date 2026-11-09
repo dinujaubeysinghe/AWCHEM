@@ -20,6 +20,7 @@ class UserController extends Controller
 {
         $registeredStudentsCount = User::query()
             ->where('is_admin', false)
+            ->whereNotNull('email_verified_at')
             ->count();
 
         return UserResource::collection(
