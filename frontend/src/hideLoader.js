@@ -27,6 +27,8 @@ const loadFonts = async () => {
 export async function hideLoader() {
   const loader = window.AWLoader
   if (!loader) return
+  if (window.location.pathname !== '/') return
+  if (sessionStorage.getItem('awchem-loader-seen') !== 'true') return
 
   if (document.readyState !== 'complete') {
     await new Promise((resolve) => window.addEventListener('load', resolve, { once: true }))

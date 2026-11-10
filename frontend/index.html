@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="/awFav.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#292940" />
-  <title>AWCHEMISTRY Learning</title>
+  <title>Asanka Wedisinghe | AWCHEMISTRY Learning</title>
 
   <style>
     /* ---------- Loading screen: a flask that fills as the site really loads ---------- */
@@ -228,6 +228,15 @@
     (function () {
       var el = document.getElementById('app-loader');
       if (!el) return;
+      if (window.location.pathname !== '/') {
+        el.remove();
+        return;
+      }
+      if (sessionStorage.getItem('awchem-loader-seen')) {
+        el.remove();
+        return;
+      }
+      sessionStorage.setItem('awchem-loader-seen', 'true');
 
       var liquid = document.getElementById('alLiquidGroup');
       var rect = document.getElementById('alLiqRect');
