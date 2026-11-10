@@ -1,13 +1,310 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/awFav.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AWCHEM Learning</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/awFav.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#292940" />
+  <title>AWCHEMISTRY Learning</title>
+
+  <style>
+    /* ---------- Loading screen: a flask that fills as the site really loads ---------- */
+    #app-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(ellipse at 50% 36%, #36365a 0%, #292940 46%, #1a1a2c 100%);
+      clip-path: circle(150% at 50% 50%);
+    }
+
+    .al-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    /* soft circular accents shared with the email verification page */
+    .al-round {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .al-round.r1 {
+      width: 320px;
+      height: 320px;
+      left: -125px;
+      top: -90px;
+      border: 34px solid rgba(255, 255, 255, .05);
+    }
+
+    .al-round.r2 {
+      width: 290px;
+      height: 290px;
+      right: -85px;
+      top: 25%;
+      background: rgba(245, 164, 70, .1);
+      filter: blur(2px);
+    }
+
+    .al-round.r3 {
+      width: 320px;
+      height: 320px;
+      bottom: -130px;
+      left: 32%;
+      border: 38px solid rgba(245, 164, 70, .1);
+    }
+
+    .al-round.r4 {
+      inset: 0;
+      border-radius: 0;
+      background: radial-gradient(circle at top right, rgba(255, 255, 255, .12), transparent 35%);
+    }
+
+    /* the flask */
+    .al-flask {
+      width: min(46vw, 190px);
+      height: auto;
+      overflow: visible;
+      filter: drop-shadow(0 0 22px rgba(245, 164, 70, .16));
+      transition: filter .4s ease;
+    }
+
+    .al-glass {
+      fill: rgba(255, 255, 255, .05);
+      stroke: rgba(255, 255, 255, .85);
+      stroke-width: 3;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    .al-tick { stroke: rgba(255, 255, 255, .35); stroke-width: 2; stroke-linecap: round; }
+    .al-shine { fill: none; stroke: rgba(255, 255, 255, .28); stroke-width: 3; stroke-linecap: round; }
+
+    .al-wave { animation: al-wave 2.6s linear infinite; }
+    .al-wave.back { animation-duration: 4.2s; animation-direction: reverse; }
+    @keyframes al-wave { to { transform: translateX(-100px); } }
+
+    .al-bub {
+      fill: rgba(255, 255, 255, .6);
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: al-rise 3s ease-in infinite;
+    }
+
+    @keyframes al-rise {
+      0% { transform: translateY(0) scale(.6); opacity: 0; }
+      15% { opacity: .95; }
+      100% { transform: translateY(-175px) scale(1.15); opacity: 0; }
+    }
+
+    .al-burst-ring {
+      fill: none;
+      stroke: #F5A446;
+      stroke-width: 3;
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    /* percentage and brand */
+    .al-pct {
+      font: 700 38px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+    }
+
+    .al-pct small { margin-left: 2px; font-size: 18px; font-weight: 600; color: #F5A446; }
+
+    .al-row { margin-top: 4px; text-align: center; }
+
+    .al-copy { min-width: 190px; text-align: center; }
+    .al-name { font: 700 17px/1.1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .12em; }
+    .al-name span { color: #F5A446; }
+    .al-msg { margin-top: 6px; min-height: 1.2em; font-size: 13px; line-height: 1.2; color: rgba(255, 255, 255, .64); }
+    .al-msg.in { animation: al-msg-in .4s ease; }
+    @keyframes al-msg-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .al-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* finish: the flask flashes, then the screen closes like an iris on the page underneath */
+    #app-loader.al-burst .al-flask { filter: drop-shadow(0 0 34px rgba(245, 164, 70, .6)); }
+    #app-loader.al-burst .al-burst-ring { animation: al-burst .7s ease-out forwards; }
+    @keyframes al-burst { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(12); opacity: 0; } }
+
+    #app-loader.al-leave {
+      clip-path: circle(0% at 50% 50%);
+      transition: clip-path .9s cubic-bezier(.7, 0, .2, 1);
+    }
+
+    #app-loader.al-leave .al-stage {
+      opacity: 0;
+      transform: scale(.9);
+      transition: opacity .4s ease, transform .8s ease;
+    }
+
+    #app-loader.al-fade { opacity: 0; transition: opacity .4s ease; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .al-wave, .al-bub, .al-burst-ring { animation: none !important; }
+      .al-bub { opacity: 0; }
+      .al-msg.in { animation: none; }
+    }
+  </style>
+
+  <noscript><style>#app-loader { display: none; }</style></noscript>
+</head>
+
+<body>
+  <div id="app-loader" role="status" aria-label="Loading AWCHEMISTRY">
+    <div class="al-round r1" aria-hidden="true"></div>
+    <div class="al-round r2" aria-hidden="true"></div>
+    <div class="al-round r3" aria-hidden="true"></div>
+    <div class="al-round r4" aria-hidden="true"></div>
+
+    <div class="al-stage">
+      <svg class="al-flask" viewBox="0 0 200 240" aria-hidden="true">
+        <defs>
+          <clipPath id="alFlask"><path d="M80 22 V88 L34 190 Q24 214 50 216 H150 Q176 214 166 190 L120 88 V22 Z" /></clipPath>
+          <clipPath id="alLiquidClip"><rect id="alLiqRect" x="0" y="222" width="200" height="80" /></clipPath>
+          <linearGradient id="alGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFC987" />
+            <stop offset="1" stop-color="#F5A446" />
+          </linearGradient>
+        </defs>
+
+        <path class="al-glass" d="M80 22 V88 L34 190 Q24 214 50 216 H150 Q176 214 166 190 L120 88 V22 Z" />
+
+        <g clip-path="url(#alFlask)">
+          <g id="alLiquidGroup" transform="translate(0 222)">
+            <g transform="translate(0 -3)">
+              <path class="al-wave back" fill="rgba(245,164,70,.45)" d="M0 0 q25 -7 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 V200 H0 Z" />
+            </g>
+            <path class="al-wave" fill="url(#alGrad)" d="M0 0 q25 -7 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 V200 H0 Z" />
+          </g>
+          <g clip-path="url(#alLiquidClip)">
+            <circle class="al-bub" cx="72" cy="206" r="3" style="animation-duration:2.6s;animation-delay:-.2s" />
+            <circle class="al-bub" cx="92" cy="206" r="2.2" style="animation-duration:3.2s;animation-delay:-1.1s" />
+            <circle class="al-bub" cx="110" cy="206" r="3.6" style="animation-duration:2.9s;animation-delay:-.7s" />
+            <circle class="al-bub" cx="130" cy="206" r="2.4" style="animation-duration:3.5s;animation-delay:-2s" />
+            <circle class="al-bub" cx="84" cy="206" r="1.8" style="animation-duration:2.2s;animation-delay:-1.5s" />
+            <circle class="al-bub" cx="120" cy="206" r="1.8" style="animation-duration:2.4s;animation-delay:-.4s" />
+            <circle class="al-bub" cx="100" cy="206" r="2.8" style="animation-duration:3.8s;animation-delay:-2.6s" />
+          </g>
+        </g>
+
+        <rect class="al-glass" x="72" y="14" width="56" height="10" rx="5" />
+        <line class="al-tick" x1="72" y1="120" x2="84" y2="120" />
+        <line class="al-tick" x1="58" y1="150" x2="70" y2="150" />
+        <line class="al-tick" x1="45" y1="180" x2="57" y2="180" />
+        <path class="al-shine" d="M88 34 V84" />
+        <path class="al-shine" d="M66 118 L52 150" />
+        <circle class="al-burst-ring" cx="100" cy="150" r="14" />
+      </svg>
+
+      <div class="al-pct" aria-hidden="true"><span id="alPct">0</span><small>%</small></div>
+
+      <div class="al-row" aria-hidden="true">
+        <div class="al-copy">
+          <div class="al-name"><span>AW</span>CHEMISTRY</div>
+          <div class="al-msg in" id="alMsg">Mixing the reagents</div>
+        </div>
+      </div>
+      <span class="al-sr">Loading</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var el = document.getElementById('app-loader');
+      if (!el) return;
+
+      var liquid = document.getElementById('alLiquidGroup');
+      var rect = document.getElementById('alLiqRect');
+      var pctEl = document.getElementById('alPct');
+      var msgEl = document.getElementById('alMsg');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var EMPTY = 222, FULL = 46;                      // liquid surface at 0% and 100%
+      var MSGS = ['Mixing the reagents', 'Balancing the equations', 'Heating the solution', 'Almost ready'];
+      var t0 = performance.now();
+      var target = 0.06, shown = 0;
+      var done = false, leaving = false, gone = false, raf = 0, lastPct = -1, lastMsg = 0;
+
+      function render() {
+        var y = (EMPTY - (EMPTY - FULL) * shown).toFixed(1);
+        liquid.setAttribute('transform', 'translate(0 ' + y + ')');
+        rect.setAttribute('y', y);
+
+        var p = Math.round(shown * 100);
+        if (p !== lastPct) { lastPct = p; pctEl.textContent = p; }
+
+        var i = shown < 0.3 ? 0 : shown < 0.6 ? 1 : shown < 0.92 ? 2 : 3;
+        if (i !== lastMsg) {
+          lastMsg = i;
+          msgEl.textContent = MSGS[i];
+          msgEl.classList.remove('in');
+          void msgEl.offsetWidth;
+          msgEl.classList.add('in');
+        }
+      }
+
+      function remove() {
+        gone = true;
+        cancelAnimationFrame(raf);
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }
+
+      function leave() {
+        if (leaving) return;
+        leaving = true;
+        if (reduce) { el.classList.add('al-fade'); setTimeout(remove, 450); return; }
+        el.classList.add('al-burst');
+        setTimeout(function () { el.classList.add('al-leave'); }, 420);
+        setTimeout(remove, 1400);
+      }
+
+      function frame(now) {
+        if (!done) {
+          // slow trickle so the flask is never frozen while waiting
+          var creep = 0.06 + Math.min(0.84, (now - t0) / 12000 * 0.84);
+          if (creep > target) target = creep;
+        }
+        shown += (target - shown) * (done ? 0.13 : 0.07);
+        if (target - shown < 0.0008) shown = target;
+        render();
+        if (done && shown >= 0.999) leave();
+        if (!gone) raf = requestAnimationFrame(frame);
+      }
+
+      // used by src/hideLoader.js
+      window.AWLoader = {
+        set: function (p) { if (p > target) target = Math.min(p, 0.97); },
+        finish: function () {
+          if (done) return;
+          done = true;
+          target = 1;
+          setTimeout(leave, 2600);                     // fallback if animation frames are paused
+        }
+      };
+
+      setTimeout(function () { window.AWLoader.finish(); }, 10000);   // safety net: never stay forever
+      raf = requestAnimationFrame(frame);
+    })();
+  </script>
+
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
